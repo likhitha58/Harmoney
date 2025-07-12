@@ -1,0 +1,56 @@
+/* index.css or global.css */
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background-color: #F7F7F8; /* Ice Cream */
+  color: #303150; /* Blueberry */
+  margin: 0;
+}
+
+a, button {
+  font-family: 'Nunito', sans-serif;
+}
+
+:root {
+  /* 🎨 Harmoney Color Theme */
+  --turquoise: #0DBACC;
+  --baby-blue: #74ACEF;
+  --cotton-candy: #F1A8B5;
+  --lavender: #9F7FE0;
+  --dodger-blue: #69ADFF;
+  --blueberry: #303150;
+  --night-sky: #2B2B45;
+  --light-grey: #BBDDCB;
+  --steel: #7E7F90;
+  --ice-cream: #F7F7F8;
+  --white: #FFFFFF;
+}
+
+h1, h2, h3, h4 {
+  color: var(--night-sky);
+  font-weight: 700;
+}
+
+.btn-primary {
+  background-color: var(--turquoise);
+  border: none;
+}
+
+.btn-success {
+  background-color: var(--cotton-candy);
+  border: none;
+  color: white;
+}
+
+.btn-link {
+  color: var(--dodger-blue);
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+.card {
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
