@@ -1,10 +1,10 @@
 import React from 'react';
-import '../styles/login.css';
+import '../styles/signup.css';
 import loginSideImage from '../assets/loginSideImage.png';
 import logo from '../assets/Harmoney.png'; // Animated logo video
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Signup = () => {
   const navigate = useNavigate();
 
   return (
@@ -24,17 +24,17 @@ const Login = () => {
 
           {/* Right: Form */}
           <div className="glass-form p-4">
-            <h3 className="fw-bold mb-2">Login</h3>
-            <p className="text-muted mb-4">Welcome back to Harmoney.. Continue your savings!!</p>
+            <h3 className="fw-bold mb-2">Sign Up</h3>
+            <p className="text-muted mb-4">Welcome to Harmoney. Start saving now!!</p>
 
             <form>
               <input type="email" placeholder="Email" className="form-input" />
               <input type="password" placeholder="Password" className="form-input" />
-              <button type="submit" className="submit-btn">Login</button>
+              <button type="submit" className="submit-btn" onClick={() => navigate('/SecurityQuestions')}>Sign Up</button>
             </form>
 
             <div className="mt-3 text-center">
-              <small>Forgot password? <span className="link-text" onClick={() => navigate('/ResetPassword')}>Reset Password</span></small>
+              <small>Started saving already? <span className="link-text" onClick={() => navigate('/login')}>Login</span></small>
             </div>
           </div>
         </div>
@@ -43,4 +43,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

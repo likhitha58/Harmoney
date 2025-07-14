@@ -1,4 +1,5 @@
 :root {
+<<<<<<< HEAD
   --primary: #A3B18A;      /* Laurel Green */
   --secondary: #F5F5F5;    /* Ivory Mist */
   --accent: #D8A7B1;       /* Dusty Rose */
@@ -153,5 +154,98 @@ body, html {
 
   .glass-form {
     padding: 36px 24px;
+=======
+  --primary: #7F56D9;       /* Amethyst Purple */
+  --secondary: #F3F0FF;     /* Soft Lilac */
+  --accent: #D8B4FE;        /* Lavender Bloom */
+  --support: #A0A0A0;       /* Cool Ash */
+  --depth: #3C3A5D;         /* Deep Plum */
+  --highlight: #C084FC;     /* Orchid Glow */
+}
+
+/* Reset & Font */
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #7f56d9ad, #c084fc98, #d8b4fe93, #f3f0ff9f);
+  background-size: 400% 400%;
+  animation: gradientShift 12s ease infinite;
+  overflow-x: hidden;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 🌐 Navbar Brand Logo */
+.navbar-brand img {
+  height: 50px;
+  width: auto;
+  background-color: transparent;
+  mix-blend-mode: multiply;
+}
+
+/* ✨ Glass Card Styles */
+.glass-card {
+  background: rgba(255, 255, 255, 0.027);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+}
+
+/* 📷 Card Icons */
+.glass-card img {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  background-color: transparent;
+  mix-blend-mode: multiply;
+}
+
+/* ⚡ Primary Button Theme */
+.btn-warning {
+  background-color: var(--highlight);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 12px rgba(192, 132, 252, 0.4);
+}
+
+.btn-warning:hover {
+  background-color: #a95ef8;
+  box-shadow: 0 6px 18px rgba(169, 94, 248, 0.5);
+}
+
+/* 🔄 Responsive Adjustments */
+@media (max-width: 768px) {
+  .glass-card {
+    width: 90% !important;
+    margin-left: 0 !important;
+  }
+
+  .navbar-nav {
+    gap: 1rem;
+  }
+
+  .navbar-brand img {
+    height: 40px;
+>>>>>>> a48d690 (Updated the welcome and sign up pages)
   }
 }
