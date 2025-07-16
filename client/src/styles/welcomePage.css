@@ -1,25 +1,25 @@
 :root {
-  --primary: #7F56D9;       /* Amethyst Purple */
-  --secondary: #F3F0FF;     /* Soft Lilac */
-  --accent: #D8B4FE;        /* Lavender Bloom */
-  --support: #A0A0A0;       /* Cool Ash */
-  --depth: #3C3A5D;         /* Deep Plum */
-  --highlight: #C084FC;     /* Orchid Glow */
+  --primary: #7F56D9;
+  --secondary: #F3F0FF;
+  --accent: #D8B4FE;
+  --support: #A0A0A0;
+  --depth: #3C3A5D;
+  --highlight: #C084FC;
 }
 
 * {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 body, html {
-  margin: 0;
-  padding: 0;
   font-family: 'Nunito', sans-serif;
   min-height: 100vh;
-  background: linear-gradient(135deg, #7f56d9ad, #c084fc98, #d8b4fe93, #f3f0ff9f);
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #F2E6EE, #977dff69);
   background-size: 400% 400%;
   animation: gradientShift 12s ease infinite;
-  overflow-x: hidden;
 }
 
 @keyframes gradientShift {
@@ -28,55 +28,77 @@ body, html {
   100% { background-position: 0% 50%; }
 }
 
-/* 🌐 Navbar Brand Logo */
+/* Navbar */
 .navbar-brand img {
-  height: 50px;
+  height: 45px;
   width: auto;
-  background-color: transparent;
   mix-blend-mode: multiply;
 }
 
-/* ✨ Glass Card Styles */
+.navbar-nav .nav-link {
+  color: #333 !important;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--primary) !important;
+  text-decoration: underline;
+}
+
+/* Hero Section */
+.welcome-page h1 {
+  font-weight: 800;
+  color: #1c1c1c;
+  line-height: 1.2;
+}
+
+.welcome-page p {
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.btn-warning {
+  background-color: #EEDC6B;
+  color: black;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+  background-color: #d4c250;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Glass Cards */
 .glass-card {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
   backdrop-filter: blur(18px) saturate(180%);
   -webkit-backdrop-filter: blur(18px) saturate(180%);
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
 }
 
 .glass-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+  transform: scale(1.02) translateY(-4px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
 }
 
-/* 📷 Card Icons */
 .glass-card img {
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
-  background-color: transparent;
+  margin-bottom: 8px;
   mix-blend-mode: multiply;
 }
 
-/* ⚡ Primary Button Theme */
-.btn-warning {
-  background-color: var(--highlight);
-  color: #fff;
-  border: none;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  box-shadow: 0 4px 12px rgba(192, 132, 252, 0.4);
-}
-
-.btn-warning:hover {
-  background-color: #a95ef8;
-  box-shadow: 0 6px 18px rgba(169, 94, 248, 0.5);
-}
-
-/* Forms (if any) */
+/* Form Elements */
 .form-input {
   width: 100%;
   padding: 14px 18px;
@@ -111,7 +133,6 @@ body, html {
   background-color: #a95ef8;
 }
 
-/* 🌐 Links & Terms */
 .link-text {
   color: var(--accent);
   font-weight: 500;
@@ -123,6 +144,7 @@ body, html {
   color: var(--highlight);
 }
 
+/* Terms */
 .terms {
   font-size: 12px;
   color: var(--support);
@@ -138,12 +160,12 @@ body, html {
   text-decoration: underline;
 }
 
-/* 🔄 Responsive Adjustments */
+/* Responsive */
 @media (max-width: 768px) {
   .glass-card {
-    width: 90% !important;
+    width: 100% !important;
     flex-direction: column;
-    margin-left: 0 !important;
+    margin: 0 auto;
   }
 
   .glass-image {
@@ -156,5 +178,9 @@ body, html {
 
   .navbar-nav {
     gap: 1rem;
+  }
+
+  .welcome-page h1 {
+    font-size: 2rem;
   }
 }
