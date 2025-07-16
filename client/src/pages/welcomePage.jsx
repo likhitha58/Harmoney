@@ -68,7 +68,7 @@ const WelcomePage = () => {
             <br></br>
             <h1>Set Goals and Track your Progress Easily</h1>
             <p>Create personalized goals based on your financial position.<br></br>Get motivated to unleash your saving potential.</p>
-            <button className="btn btn-light rounded-pill px-4 mt-3">Learn More</button>
+            <button className="btn btn-light rounded-pill px-4 mt-3" onClick={() => navigate('/signup')}>Learn More</button>
             <br></br>
             <br></br>
           </div>
@@ -77,7 +77,7 @@ const WelcomePage = () => {
             <br></br>
             <h1>Smarter Savings, Every Day</h1>
             <p>Get real-time tips and live your dream life.</p>
-            <button className="btn rounded-pill px-4 mt-3" style={{ backgroundColor: '#F3F0FF' }}>Explore</button>
+            <button className="btn rounded-pill px-4 mt-3" onClick={() => navigate('/signup')} style={{ backgroundColor: '#F3F0FF' }}>Explore</button>
             <br></br>
             <br></br>
           </div>
@@ -171,25 +171,24 @@ const WelcomePage = () => {
         </div>
       </footer>
       <Modal show={showAboutModal} onHide={handleClose} centered className="about-modal">
-        <Modal.Header closeButton className="border-0">
-          <Modal.Title className="w-100 text-center">
-            {/* <img src={modalImage} alt="About Harmoney" className="modal-image mb-2" style={{height:300,width:300,background:'transparent',mixBlendMode:'multiply'}}/> */}
-            <h4 className="mt-2" style={{fontSize:40}}>About Harmoney</h4>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="text-center">
-          <p style={{ fontSize: '21px', color: '#ffffffff' }}>
-            Harmoney is your intelligent financial assistant that helps you track spending, set achievable savings goals, and stay in control of your financial journey.
-            <br /><br />
-            Our mission is to bring harmony to your finances through smart technology and helpful insights tailored to your lifestyle.
-          </p>
-        </Modal.Body>
-        <Modal.Footer className="justify-content-center border-0">
-          <Button variant="outline-primary" onClick={handleClose} style={{ borderRadius: '20px', padding: '6px 20px' }}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+  <Modal.Header closeButton className="border-0 justify-content-center">
+    <Modal.Title className="text-center w-100">
+      <h4 className="about-modal-title">About Harmoney</h4>
+    </Modal.Title>
+  </Modal.Header>
+  <Modal.Body className="text-center">
+    <p className="about-modal-text">
+      Harmoney is your intelligent financial assistant that helps you track spending, set achievable savings goals, and stay in control of your financial journey.
+      <br /><br />
+      Our mission is to bring harmony to your finances through smart technology and helpful insights tailored to your lifestyle.
+    </p>
+  </Modal.Body>
+  <Modal.Footer className="justify-content-center border-0">
+    <Button variant="outline-dark" onClick={handleClose} className="about-modal-close-btn">
+      Close
+    </Button>
+  </Modal.Footer>
+</Modal>
 
     </main>
   );
