@@ -5,7 +5,7 @@ import Signup from './pages/signup';
 import Login from './pages/login';
 import SecurityQuestions from './pages/SecurityQuestions'; 
 import ResetPassword from './pages/ResetPassword';
-import WelcomePage from './pages/WelcomePage'; 
+import WelcomePage from './pages/welcomePage'; 
 const App = () => {
   return (
     <Router>
