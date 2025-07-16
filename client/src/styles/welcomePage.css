@@ -5,182 +5,167 @@
   --support: #A0A0A0;
   --depth: #3C3A5D;
   --highlight: #C084FC;
+
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --blur: blur(10px);
 }
 
 * {
   box-sizing: border-box;
-  padding: 0;
+  font-family: Nunito;
+}
+
+body,
+html {
   margin: 0;
+  padding: 0;
+  background: transparent;
+  color: #212529;
 }
 
-body, html {
-  font-family: 'Nunito', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-  background: linear-gradient(135deg, #F2E6EE, #977dff69);
-  background-size: 400% 400%;
-  animation: gradientShift 12s ease infinite;
+/* ===== Navbar ===== */
+.glass-navbar {
+  background: var(--glass-bg);
+  backdrop-filter: var(--blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 0.75rem 2rem;
+  margin: 1rem auto;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
 }
 
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Navbar */
-.navbar-brand img {
-  height: 45px;
-  width: auto;
+/* .glass-navbar img {
+  height: 70px;
+  background-color: transparent;
   mix-blend-mode: multiply;
-}
+} */
 
-.navbar-nav .nav-link {
-  color: #333 !important;
+.glass-navbar .nav-link {
+  color: #000000;
   font-weight: 500;
-  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
-.navbar-nav .nav-link:hover {
-  color: var(--primary) !important;
-  text-decoration: underline;
+.glass-navbar .nav-link:hover {
+  color: rgba(91, 5, 190, 0.631);
 }
 
-/* Hero Section */
-.welcome-page h1 {
-  font-weight: 800;
-  color: #1c1c1c;
-  line-height: 1.2;
+/* ===== Carousel ===== */
+.carousel-item h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
 }
 
-.welcome-page p {
-  font-size: 1.1rem;
-  color: #444;
+.carousel-item p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
-.btn-warning {
-  background-color: #EEDC6B;
-  color: black;
-  border: none;
-  border-radius: 50px;
-  padding: 10px 24px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-warning:hover {
-  background-color: #d4c250;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-/* Glass Cards */
+/* ===== Glass Feature Cards ===== */
 .glass-card {
-  background: rgba(255, 255, 255, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  /* background: var(--glass-bg); */
+  backdrop-filter: var(--blur);
+  border: 1px solid var(--glass-border);
   border-radius: 20px;
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
+  padding: 2rem;
+  margin: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  min-height: 200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background-color:#e7e3f9
+}
+
+/* .glass-card img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+} */
+
+.glass-card h5 {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  color: #212529;
 }
 
 .glass-card:hover {
-  transform: scale(1.02) translateY(-4px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
-.glass-card img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  margin-bottom: 8px;
-  mix-blend-mode: multiply;
+/* ===== Fade-in Animation ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease forwards;
 }
 
-/* Form Elements */
-.form-input {
-  width: 100%;
-  padding: 14px 18px;
-  margin-bottom: 18px;
-  border: none;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.6);
-  font-size: 16px;
-  color: var(--depth);
-  transition: background 0.3s ease;
+.delay-1 {
+  animation-delay: 0.3s;
 }
 
-.form-input:focus {
-  outline: none;
-  background: rgba(255, 255, 255, 0.85);
+.delay-2 {
+  animation-delay: 0.6s;
 }
 
-.submit-btn {
-  width: 100%;
-  padding: 12px;
-  background-color: var(--highlight);
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.delay-3 {
+  animation-delay: 0.9s;
 }
 
-.submit-btn:hover {
-  background-color: #a95ef8;
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.link-text {
-  color: var(--accent);
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: underline;
+/* ===== Featurette ===== */
+.featurette-divider {
+  margin: 3rem 0;
 }
 
-.link-text:hover {
-  color: var(--highlight);
+.featurette-heading {
+  font-weight: 600;
+  font-size: 3rem;
 }
 
-/* Terms */
-.terms {
-  font-size: 12px;
-  color: var(--support);
-  margin-top: 24px;
-}
-
-.terms a {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-.terms a:hover {
-  text-decoration: underline;
-}
-
-/* Responsive */
+/* ===== Responsive Tweaks ===== */
 @media (max-width: 768px) {
-  .glass-card {
-    width: 100% !important;
+  .glass-navbar {
     flex-direction: column;
-    margin: 0 auto;
-  }
-
-  .glass-image {
-    display: none;
-  }
-
-  .navbar-brand img {
-    height: 40px;
-  }
-
-  .navbar-nav {
+    align-items: flex-start;
     gap: 1rem;
   }
 
-  .welcome-page h1 {
+  .carousel-item h1 {
     font-size: 2rem;
   }
+
+  .carousel-item p {
+    font-size: 1rem;
+  }
+}
+
+/* About Modal Styling */
+.about-modal .modal-content {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  padding: 1rem;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+
+.about-modal .modal-header,
+.about-modal .modal-footer {
+  border: none;
+  background: transparent;
 }
