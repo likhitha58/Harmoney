@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 .background-abstract {
   position: relative;
   overflow: hidden;
@@ -6,29 +6,3 @@
   z-index: 0;
 }
 
-/* .background-abstract::before,
-.background-abstract::after {
-  content: '';
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  opacity: 0.6;
-  z-index: -1;
-}
-
-.background-abstract::before {
-  background: radial-gradient(circle at 30% 30%, #e0c6ee 20%, transparent 70%),
-              radial-gradient(circle at 70% 70%, #6f65ff76 15%, transparent 60%);
-}
-
-.background-abstract::after {
-  background: radial-gradient(circle at 80% 20%, #d592ff68 25%, transparent 60%),
-              radial-gradient(circle at 20% 80%, #6f65ff82 15%, transparent 70%);
-} */
-=======
-
->>>>>>> 4df033cec24310e9ad8a0fa89257031bae0c1a7f
