@@ -6,6 +6,8 @@ import Login from './pages/login';
 import SecurityQuestions from './pages/SecurityQuestions'; 
 import ResetPassword from './pages/ResetPassword';
 import WelcomePage from './pages/welcomePage'; 
+import HomePage from './pages/HomePage'; 
+import GoalsPage from './pages/GoalsPage'; 
 const App = () => {
   return (
     <Router>
@@ -15,6 +17,8 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/SecurityQuestions" element={<SecurityQuestions />} />
         <Route path="/ResetPassword" element={<ResetPassword />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/goals" element={<GoalsPage />} />
       </Routes>
     </Router>
   );
