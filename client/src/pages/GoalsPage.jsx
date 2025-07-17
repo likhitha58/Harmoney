@@ -58,8 +58,8 @@ const GoalsPage = () => {
       </div>
 
       <div className="background-abstract position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
-        <div className="col-md-6 p-lg-5 mx-auto my-5">
-          <h1 className="display-3 fw-bold" style={{ fontSize: 60 }}>Harmoney inspires you to grow towards your asprirations through our image generator.</h1>
+        <div className="col-md-6 p-lg-5 mx-auto my-3">
+          <h1 className="display-3 fw-bold" style={{ fontSize: 50 }}>Harmoney inspires you to grow towards your asprirations through our image generator.</h1>
           <h2 className="fw-normal text-muted mb-3">DreamFrame - See yourself achieve your goal</h2>
           <div className="d-flex gap-3 justify-content-center lead fw-normal">
             <button

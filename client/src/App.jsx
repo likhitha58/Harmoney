@@ -9,6 +9,8 @@ import ResetPassword from './pages/ResetPassword';
 import WelcomePage from './pages/welcomePage'; 
 import HomePage from './pages/HomePage'; 
 import GoalsPage from './pages/GoalsPage'; 
+import AddGoal from './pages/AddGoal';
+import DreamFrame from './ai-bots/DreamFrame'
 const App = () => {
   return (
     <Router>
@@ -20,6 +22,8 @@ const App = () => {
         <Route path="/ResetPassword" element={<ResetPassword />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/goals" element={<GoalsPage />} />
+        <Route path="/add-goal" element={<AddGoal />} />
+        <Route path="/dreamframe" element={<DreamFrame />} />
       </Routes>
     </Router>
   );
