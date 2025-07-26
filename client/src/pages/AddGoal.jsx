@@ -1,80 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import axios from "axios";
 
 const AddGoal = () => {
-  const [goalName, setGoalName] = useState('');
-  const [targetAmount, setTargetAmount] = useState('');
-  const [currentSavings, setCurrentSavings] = useState('');
-  const [targetDate, setTargetDate] = useState('');
-  const [plan, setPlan] = useState('');
+  const [formData, setFormData] = useState({
+    title: "",
+    targetAmount: "",
+    currentSavings: "",
+    monthlyIncome: "",
+    monthlyExpenses: "",
+    months: "",
+  });
+  const [plan, setPlan] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
   e.preventDefault();
-
   try {
-    const res = await fetch("http://localhost:5000/api/openai/generate-savings-plan", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        goalName,
-        targetAmount,
-        targetDate,
-      }),
-    });
-
-    const data = await res.json();
-    if (!res.ok) {
-      alert(data.error || "Failed to generate plan");
-      return;
-    }
-
-    alert("Savings plan generated:\n\n" + data.plan);
-    // You can also display this on the page instead of alert
+    const token = localStorage.getItem("token");
+    const res = await axios.post(
+      "http://localhost:5000/api/goals",
+      formData,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    console.log("Response from backend:", res.data); // <--- ADD THIS
+    setPlan(res.data.savingsPlan);
   } catch (err) {
     console.error(err);
-    alert("Something went wrong");
   }
 };
 
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="p-4">
       <h2>Add Goal</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Goal Name"
-          value={goalName}
-          onChange={(e) => setGoalName(e.target.value)}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Target Amount"
-          value={targetAmount}
-          onChange={(e) => setTargetAmount(e.target.value)}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Current Savings"
-          value={currentSavings}
-          onChange={(e) => setCurrentSavings(e.target.value)}
-        />
-        <input
-          type="date"
-          value={targetDate}
-          onChange={(e) => setTargetDate(e.target.value)}
-          required
-        />
+        <input type="text" name="title" placeholder="Title" onChange={handleChange} />
+        <input type="number" name="targetAmount" placeholder="Target Amount" onChange={handleChange} />
+        <input type="number" name="currentSavings" placeholder="Current Savings" onChange={handleChange} />
+        <input type="number" name="monthlyIncome" placeholder="Monthly Income" onChange={handleChange} />
+        <input type="number" name="monthlyExpenses" placeholder="Monthly Expenses" onChange={handleChange} />
+        <input type="number" name="months" placeholder="Months" onChange={handleChange} />
         <button type="submit">Save Goal</button>
       </form>
 
       {plan && (
-        <div style={{ marginTop: '20px', whiteSpace: 'pre-wrap' }}>
-          <h3>Your AI Savings Plan:</h3>
-          <p>{plan}</p>
+        <div className="mt-4">
+          <h3>Savings Plan</h3>
+          <table border="1" cellPadding="8">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Amount to Save</th>
+              </tr>
+            </thead>
+            <tbody>
+              {plan.map((p, i) => (
+                <tr key={i}>
+                  <td>{p.month}</td>
+                  <td>{p.amount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

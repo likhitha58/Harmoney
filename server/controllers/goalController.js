@@ -1,84 +1,46 @@
-import Goal from '../models/Goal.js';
+// server/controllers/goalController.js
+import Goal from "../models/goalModel.js";  // Adjust the path if different
+import { getSavingsPlanFromAI } from "../services/aiService.js";
 
-// Add a new goal
-export const addGoal = async (req, res) => {
+// Create Goal with AI-generated savings plan
+export const createGoal = async (req, res) => {
   try {
-    const { goalName, goalType, targetAmount, targetDate,
-            income, expenses, savings, frequency, startDate } = req.body;
+    const { title, targetAmount, currentSavings, monthlyIncome, monthlyExpenses, months } = req.body;
 
-    // Here, req.user.id would come from middleware after JWT auth
-    const userId = req.user ? req.user.id : null; // temporary fallback
+    // Get plan from AI
+    const savingsPlan = await getSavingsPlanFromAI({
+      targetAmount,
+      currentSavings,
+      monthlyIncome,
+      monthlyExpenses,
+      months,
+    });
 
     const goal = new Goal({
-      user: userId,
-      goalName,
-      goalType,
+      userId: req.user.id,
+      title,
       targetAmount,
-      targetDate,
-      income,
-      expenses,
-      savings,
-      frequency,
-      startDate,
+      currentSavings,
+      monthlyIncome,
+      monthlyExpenses,
+      months,
+      savingsPlan, // Save the AI-generated plan
     });
 
-    const savedGoal = await goal.save();
-    res.status(201).json(savedGoal);
-  } catch (error) {
-    console.error('Error adding goal:', error);
-    res.status(500).json({ message: 'Failed to add goal', error });
+    await goal.save();
+    res.status(201).json(goal);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
   }
 };
 
-// Get all goals for a user
+// Get all goals of a user
 export const getGoals = async (req, res) => {
   try {
-    const userId = req.user ? req.user.id : null; // temporary fallback
-    const goals = await Goal.find({ user: userId });
+    const goals = await Goal.find({ userId: req.user.id });
     res.json(goals);
-  } catch (error) {
-    console.error('Error fetching goals:', error);
-    res.status(500).json({ message: 'Failed to fetch goals', error });
+  } catch (err) {
+    res.status(500).json({ message: "Server Error" });
   }
-};
-
-// Get single goal by ID
-export const getGoalById = async (req, res) => {
-  try {
-    const goal = await Goal.findById(req.params.id);
-    if (!goal) {
-      return res.status(404).json({ message: 'Goal not found' });
-    }
-    res.json(goal);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch goal', error });
-  }
-};
-
-// Update a goal
-export const updateGoal = async (req, res) => {
-  try {
-    const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    if (!updatedGoal) {
-      return res.status(404).json({ message: 'Goal not found' });
-    }
-    res.json(updatedGoal);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to update goal', error });
-  }
-};
-
-// Delete a goal
-export const deleteGoal = async (req, res) => {
-  try {
-    const goal = await Goal.findByIdAndDelete(req.params.id);
-    if (!goal) {
-      return res.status(404).json({ message: 'Goal not found' });
-    }
-    res.json({ message: 'Goal deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to delete goal', error });
-  }
 };

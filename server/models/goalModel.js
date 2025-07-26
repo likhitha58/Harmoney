@@ -1,12 +1,22 @@
 import mongoose from "mongoose";
 
-const GoalSchema = new mongoose.Schema({
-  goalName: { type: String, required: true },
-  targetAmount: { type: Number, required: true },
-  currentSavings: { type: Number, default: 0 },
-  targetDate: { type: String, required: true },
-  savingsPlan: { type: String }, // The AI-generated plan
+const savingsPlanSchema = new mongoose.Schema({
+  month: Number,
+  amount: Number,
 });
 
-const Goal = mongoose.model("Goal", GoalSchema);
-export default Goal;
+const goalSchema = new mongoose.Schema(
+  {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    title: { type: String, required: true },
+    targetAmount: Number,
+    currentSavings: Number,
+    monthlyIncome: Number,
+    monthlyExpenses: Number,
+    months: Number,
+    savingsPlan: [savingsPlanSchema],
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("Goal", goalSchema);
