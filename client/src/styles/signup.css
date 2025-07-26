@@ -1,0 +1,193 @@
+:root {
+  --primary: #7F56D9;       /* Amethyst Purple */
+  --secondary: #F3F0FF;     /* Soft Lilac */
+  --accent: #D8B4FE;        /* Lavender Bloom */
+  --support: #A0A0A0;       /* Cool Ash */
+  --depth: #3C3A5D;         /* Deep Plum */
+  --highlight: #C084FC;     /* Orchid Glow */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #7f56d9ad, #c084fc98, #d8b4fe93, #f3f0ff9f);
+  background-size: 400% 400%;
+  animation: gradientShift 9s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Use for transparent PNG or WebM video */
+.welcome-header img,
+.welcome-header video {
+  width: 200px;
+  height: auto;
+  object-fit: contain;
+  background-color: transparent;
+  mix-blend-mode: multiply; 
+  border: none;
+  pointer-events: none;
+  margin-top:20px;
+}
+
+/* 💠 Glass container and card */
+.glass-container {
+  min-height: calc(80vh - 100px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding: 24px; */
+}
+
+.glass-card {
+  display: flex;
+  flex-direction: row;
+  max-width: 1100px;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.glass-image {
+  flex: 1;
+  min-height: 100%;
+  opacity: 70%;
+}
+
+.glass-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.glass-form {
+  flex: 1;
+  padding: 48px 40px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--depth);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--support);
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.65);
+  font-size: 16px;
+  color: var(--depth);
+  transition: background 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--highlight);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #a95ef8;
+}
+
+.link-text {
+  color: var(--accent);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link-text:hover {
+  color: var(--highlight);
+}
+
+.terms {
+  font-size: 12px;
+  color: var(--support);
+  margin-top: 24px;
+}
+
+.terms a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}
+
+/* 🔄 Responsive Design */
+@media (max-width: 768px) {
+  .glass-card {
+    flex-direction: column;
+  }
+
+  .glass-image {
+    display: none;
+  }
+
+  .glass-form {
+    padding: 36px 24px;
+  }
+
+  .welcome-header img,
+  .welcome-header video {
+    width: 100px;
+  }
+
+  .harmoney-title {
+    font-size: 24px;
+  }
+}
+
+/* ✨ Fade In Animation */
+@keyframes fadeInTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-25px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

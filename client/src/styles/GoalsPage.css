@@ -1,0 +1,8 @@
+
+.background-abstract {
+  position: relative;
+  overflow: hidden;
+  background: #7f56d967;
+  z-index: 0;
+}
+

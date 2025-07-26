@@ -1,0 +1,91 @@
+:root {
+          --purple: #7F56D9;
+          --light-purple: #F3F0FF;
+          --soft-purple: #f9f8ff;
+        }
+
+        .nav-purple {
+          color: var(--purple);
+          font-size: 17px;
+        }
+
+        .btn-purple {
+          background-color: var(--purple);
+          border-color: var(--purple);
+          color: white;
+        }
+
+        .btn-purple:hover {
+          background-color: #6b46c1;
+          border-color: #6b46c1;
+        }
+
+        .btn-outline-purple {
+          color: var(--purple);
+          border: 1px solid var(--purple);
+          background-color: transparent;
+        }
+
+        .btn-outline-purple:hover {
+          background-color: var(--purple);
+          color: white;
+        }
+
+        .jumbotron-custom {
+          background-color: var(--light-purple);
+        }
+
+        .jumbotron-title {
+          color: var(--purple);
+          font-weight: 600;
+        }
+
+        .jumbotron-text {
+          color: var(--purple);
+        }
+
+        .form-label-purple {
+          color: var(--purple);
+          font-weight: 500;
+        }
+
+        .section-heading {
+          color: var(--purple);
+          font-weight: 600;
+          margin-top: 2rem;
+        }
+
+        .image-strip-wrapper {
+          background-color: var(--soft-purple);
+        }
+
+        .scrolling-track {
+          display: flex;
+          animation: scroll-left 40s linear infinite;
+          width: max-content;
+        }
+
+        .scroll-img {
+          width: 220px;
+          height: auto;
+          margin-right: 20px;
+          border-radius: 12px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease;
+        }
+
+        .scroll-img:hover {
+          transform: scale(1.05);
+        }
+
+        @keyframes scroll-left {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+
+        @media (max-width: 768px) {
+          .scroll-img {
+            width: 160px;
+            margin-right: 12px;
+          }
+        }
