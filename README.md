@@ -1,15 +1,16 @@
-# 💸 Harmoney – Your Financial Goals, Simplified
+# Harmoney – Your Financial Goals, Simplified
 
 **Harmoney** is a beautifully designed web application that empowers individuals to plan, visualize, and achieve their financial dreams. With a modern interface, AI-powered tools, and inspirational content, Harmoney transforms the way you manage money and goals.
 
 ---
 
-## 🌟 Features
+## Features
 
 - 🎯 **Goal Tracker** – Set, manage, and track your financial goals.
-- 💬 **BudgetBuddy AI Chatbot** – Your intelligent finance companion for tips, planning, and queries.
-- 🧠 **DreamFrame AI Image Generator** – Visualize your dreams before you achieve them.
+-  **BudgetBuddy AI Chatbot** – Your intelligent finance companion for tips, planning, and queries.<img src="./client/src/assets/bb.png" alt="BudgetBuddy Chatbot" width="400" style="border-radius:12px; margin-top:10px;" />
+-  **DreamFrame AI Image Generator** – Visualize your dreams before you achieve them.<img src="./client/src/assets/FRAME.png" alt="BudgetBuddy Chatbot" width="400" style="border-radius:12px; margin-top:10px;" />
 - 🖼️ **Inspiration Gallery** – See others achieving their dreams to stay motivated.
+- 📊 **AI Savings Plan** –  Generate a customized monthly savings plan using Gemini AI.
 - 📱 **Responsive Design** – Sleek experience across all devices.
 - ✨ **Motivational Quotes** – Gentle nudges to keep you inspired.
 
