@@ -1,0 +1,116 @@
+/* General layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Glass Panel */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  margin-bottom: 2rem;
+}
+
+/* Headings */
+.glass-panel h2,
+.glass-panel h4 {
+  font-weight: 600;
+  color: #4b4b4b;
+}
+
+/* Form styles */
+.goal-form .form-label {
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+.goal-form .form-control,
+.goal-form .form-select {
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 16px;
+  background-color: #f9fafb;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s ease;
+}
+
+.goal-form .form-control:focus,
+.goal-form .form-select:focus {
+  border-color: #7f56d9;
+  outline: none;
+  box-shadow: 0 0 4px rgba(127, 86, 217, 0.4);
+}
+
+.goal-form textarea {
+  resize: none;
+}
+
+/* Buttons */
+button.btn-primary {
+  background-color: #7f56d9;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+button.btn-primary:hover {
+  background-color: #6b46c1;
+}
+
+/* Savings Plan Table */
+.table {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table th {
+  background-color: #7f56d9;
+  color: white;
+  font-weight: 500;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+/* Page structure */
+.goal-container {
+  padding: 1rem;
+  margin-bottom: 3rem;
+}
+
+header img {
+  cursor: pointer;
+}
+
+/* Footer */
+footer {
+  background-color: #fff;
+}
+
+footer small {
+  display: block;
+  color: #6c757d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glass-panel {
+    padding: 1rem !important;
+  }
+  .goal-form .form-control,
+  .goal-form .form-select {
+    font-size: 14px;
+  }
+  button.btn-primary {
+    width: 100%;
+  }
+}

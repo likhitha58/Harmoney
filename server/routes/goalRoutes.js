@@ -4,10 +4,10 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// AI-generated savings plan
+// Create plan
 router.post("/budget-plan", protect, createGoal);
 
-// Get all goals
+// Get all user goals
 router.get("/goals", protect, getGoals);
 
 export default router;

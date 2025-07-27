@@ -4,25 +4,31 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export const getSavingsPlanFromAI = async (goalData) => {
   const prompt = `
-    Based on the following data, return only valid JSON of a savings plan.
+    You are a financial planning assistant. Based on the following data, create a JSON savings plan.
+    
+    Inputs:
+    - Goal: ${goalData.title || "Unnamed Goal"}
+    - Description: ${goalData.description || "No description provided"}
+    - Target amount: ${goalData.targetAmount}
+    - Current savings: ${goalData.currentSavings}
+    - Monthly income: ${goalData.monthlyIncome}
+    - Monthly expenses: ${goalData.monthlyExpenses}
+    - Timeframe (months): ${goalData.months}
+    - Preferred approach: ${goalData.riskProfile}
 
-    Target amount: ${goalData.targetAmount}
-    Current savings: ${goalData.currentSavings}
-    Monthly income: ${goalData.monthlyIncome}
-    Monthly expenses: ${goalData.monthlyExpenses}
-    Timeframe (months): ${goalData.months}
-    Risk profile: ${goalData.riskProfile}
-    Age group: ${goalData.ageGroup}
+    Guidelines:
+    1. Do NOT include any explanation or text. Output ONLY a JSON array.
+    2. Make the plan progressive:
+       - First few months: smaller savings
+       - Increase gradually as habit forms
+       - Ensure total savings roughly meet the target by the end.
+    3. Include allocation suggestions for each month (e.g. "60% bank savings, 30% SIP, 10% emergency fund").
+    4. Ensure amounts are realistic (never more than (income - expenses)).
 
-    Consider the risk profile when recommending allocation:
-    - Conservative: more savings, less risky investments
-    - Balanced: mix of savings and moderate investments
-    - Aggressive: higher investments, less cash savings
-
-    Format:
+    Format (JSON array only):
     [
-      {"month":1, "amount":5000, "allocation":"50% savings, 30% mutual funds, 20% emergency"},
-      {"month":2, "amount":4800, "allocation":"..."}
+      {"month":1, "amount":4000, "allocation":"60% bank savings, 30% SIP, 10% emergency"},
+      {"month":2, "amount":4500, "allocation":"..."}
     ]
   `;
 
@@ -30,6 +36,7 @@ export const getSavingsPlanFromAI = async (goalData) => {
   const result = await model.generateContent(prompt);
   const text = result.response.text().trim();
 
+  // Extract JSON safely
   const jsonMatch = text.match(/\[[\s\S]*\]/);
   if (!jsonMatch) {
     console.error("AI did not return JSON:", text);

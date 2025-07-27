@@ -11,6 +11,8 @@ import GoalsPage from './pages/GoalsPage';
 import AddGoal from './pages/AddGoal';
 import DreamFrame from './ai-bots/DreamFrame';
 import BudgetBuddy from './ai-bots/BudgetBuddy';
+import ActiveGoals from './pages/ActiveGoals';
+import ActiveGoalDetails from "./pages/ActiveGoalDetails";
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
@@ -64,6 +66,24 @@ const App = () => {
           element={
             <ProtectedRoute>
               <BudgetBuddy />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/activegoals"
+          element={
+            <ProtectedRoute>
+              <ActiveGoals />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/activegoals/:id"
+          element={
+            <ProtectedRoute>
+              <ActiveGoalDetails />
             </ProtectedRoute>
           }
         />

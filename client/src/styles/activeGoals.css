@@ -1,0 +1,22 @@
+.goal-container {
+  min-height: 70vh;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+}
+
+.card {
+  border-radius: 15px;
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+.card-text {
+  color: #444;
+}
