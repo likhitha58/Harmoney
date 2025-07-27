@@ -7,10 +7,10 @@
 ## 🌟 Features
 
 - 🎯 **Goal Tracker** – Set, manage, and track your financial goals.
-- 💬 **BudgetBuddy AI Chatbot** – Your intelligent finance companion for tips, planning, and queries.  
-  <img src="./client/src/assets/bb.png" alt="BudgetBuddy Chatbot" width="400" style="border-radius:12px; margin-top:10px;" />
-- 🧠 **DreamFrame AI Image Generator** – Visualize your dreams before you achieve them.  
-  <img src="./client/src/assets/FRAME.png" alt="DreamFrame" width="400" style="border-radius:12px; margin-top:10px;" />
+- **BudgetBuddy AI Chatbot** – Your intelligent finance companion for tips, planning, and queries.  
+  <img src="./client/src/assets/bb.png" alt="BudgetBuddy Chatbot" width="200" style="border-radius:12px; margin-top:10px; background:transparent; mix-blend-mode:multiply;" />
+- **DreamFrame AI Image Generator** – Visualize your dreams before you achieve them.  
+  <img src="./client/src/assets/FRAME.png" alt="DreamFrame" width="200" style="border-radius:12px; margin-top:10px;" />
 - 🖼️ **Inspiration Gallery** – See others achieving their dreams to stay motivated.
 - 📊 **AI Savings Plan** – Generate a customized monthly savings plan using Gemini AI.
 - 📱 **Responsive Design** – Sleek experience across all devices.
@@ -20,7 +20,9 @@
 
 ## 🤖 AI Integrations
 
-### 🧠 DreamFrame – AI Image Generator
+### DreamFrame – AI Image Generator  
+<img src="./client/src/assets/FRAME.png" alt="DreamFrame" width="50" style="border-radius:12px; margin-top:10px;" />
+
 DreamFrame is a generative AI feature that takes your dreams (e.g., "starting a bakery", "graduating college", "buying a home") and produces beautiful images that visualize your financial aspirations. This helps you emotionally connect with your goals.
 
 - **Built using:** Stability AI (Stable Diffusion)
@@ -31,7 +33,9 @@ DreamFrame is a generative AI feature that takes your dreams (e.g., "starting a 
 
 ---
 
-### 💬 BudgetBuddy – Finance Chatbot
+### BudgetBuddy – Finance Chatbot  
+<img src="./client/src/assets/bb.png" alt="BudgetBuddy Chatbot" width="50" style="border-radius:12px; margin-top:10px; background:transparent; mix-blend-mode:multiply;" />
+
 BudgetBuddy is an AI chatbot that helps you:
 - Create personalized budgets
 - Suggest saving strategies
