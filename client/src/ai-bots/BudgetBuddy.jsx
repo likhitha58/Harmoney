@@ -1,138 +1,236 @@
-import React, { useState } from 'react';
-import '../styles/budgetBuddy.css';
-import { Container, Card, InputGroup, FormControl, Button } from 'react-bootstrap';
-import Harmoneylogo from '../assets/logo.png';
-import budgetbuddy from '../assets/bb.png';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Container, Card, Button, FormControl, InputGroup } from "react-bootstrap";
+import Harmoneylogo from "../assets/logo.png";
+import budgetbuddy from "../assets/bb.png";
+import "../styles/budgetBuddy.css";
 
 const BudgetBuddy = () => {
-  const [messages, setMessages] = useState([]);
-  const [userInput, setUserInput] = useState('');
   const navigate = useNavigate();
+  const [messages, setMessages] = useState([
+    { sender: "bot", text: "Hi! I’m BudgetBuddy. Ask me anything about your savings plan or personal finance." }
+  ]);
+  const [userInput, setUserInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const chatEndRef = useRef(null);
 
-  const handleSend = () => {
-    if (userInput.trim() === '') return;
+  // Scroll to bottom whenever messages update
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
-    const newMessages = [...messages, { sender: 'user', text: userInput }];
-    const botReply = getBotReply(userInput);
-    newMessages.push({ sender: 'bot', text: botReply });
+  const handleSend = async () => {
+    if (!userInput.trim()) return;
 
+    const newMessages = [...messages, { sender: "user", text: userInput }];
     setMessages(newMessages);
-    setUserInput('');
-  };
+    setUserInput("");
+    setLoading(true);
 
-  const getBotReply = (msg) => {
-    const lower = msg.toLowerCase();
-    if (lower.includes('budget'))
-      return "Sure! What's your monthly income and expenses?";
-    else if (lower.includes('save'))
-      return 'Start by tracking your small expenses and set a savings goal.';
-    else if (lower.includes('goal'))
-      return 'Try creating SMART goals: Specific, Measurable, Achievable, Relevant, and Time-bound.';
-    else
-      return "I'm BudgetBuddy! Ask me anything about finances, saving, budgeting, or expense tracking.";
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.post(
+        "/api/chat",
+        { question: userInput },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setMessages([
+        ...newMessages,
+        { sender: "bot", text: res.data.answer }
+      ]);
+    } catch (err) {
+      console.error("Error with chatbot", err);
+      setMessages([
+        ...newMessages,
+        { sender: "bot", text: "Sorry, I couldn’t respond. Please try again later." }
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <>
+    <div className="container">
       {/* NAVBAR */}
-      <div className="container">
-        <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-          <div className="col-md-3 mb-2 mb-md-0">
-            <a href="/" className="d-inline-flex align-items-center text-decoration-none">
-              <img src={Harmoneylogo} alt="Harmoney Logo" width="60" height="60" />
-            </a>
-          </div>
-          <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li>
-              <button
-                className="nav-link px-4 btn btn-link"
-                style={{ color: '#7f56d9', fontSize: '17px' }}
-                onClick={() => navigate('/home')}
-              >
-                Home
-              </button>
-            </li>
-            <li>
-              <button
-                className="nav-link px-4 btn btn-link"
-                style={{ color: '#7f56d9', fontSize: '17px' }}
-                onClick={() => navigate('/activegoals')}
-              >
-                Active goals
-              </button>
-            </li>
-            <li>
-              <button
-                className="nav-link px-4 btn btn-link"
-                style={{ color: '#7f56d9', fontSize: '17px' }}
-                onClick={() => navigate('/pastgoals')}
-              >
-                Achieved goals
-              </button>
-            </li>
-            <li>
-              <button
-                className="nav-link px-4 btn btn-link"
-                style={{ color: '#7f56d9', fontSize: '17px' }}
-                onClick={() => navigate('/budgetbuddy')}
-              >
-                Chat
-              </button>
-            </li>
-            <li>
-              <button
-                className="nav-link px-4 btn btn-link"
-                style={{ color: '#7f56d9', fontSize: '17px' }}
-                onClick={() => navigate('/dreamframe')}
-              >
-                DreamFrame
-              </button>
-            </li>
-          </ul>
-          <div className="col-md-3 text-end">
-            <button className="btn me-2" onClick={() => navigate('/login')} style={{ background: '#7f56d955' }}>Logout</button>
-          </div>
-        </header>
-      </div>
+      <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-white">
+        <div className="col-md-3 mb-2 mb-md-0">
+          <button
+            className="btn btn-link p-0"
+            onClick={() => navigate("/")}
+            style={{ textDecoration: "none" }}
+          >
+            <img src={Harmoneylogo} alt="Harmoney Logo" width="60" height="60" />
+          </button>
+        </div>
+        <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+          <li>
+            <button
+              className="nav-link px-4 btn btn-link"
+              style={{ color: "#7f56d9ff", fontSize: "17px" }}
+              onClick={() => navigate("/home")}
+            >
+              Home
+            </button>
+          </li>
+          <li>
+            <button
+              className="nav-link px-4 btn btn-link"
+              style={{ color: "#7f56d9ff", fontSize: "17px" }}
+              onClick={() => navigate("/activegoals")}
+            >
+              Active goals
+            </button>
+          </li>
+          <li>
+            <button
+              className="nav-link px-4 btn btn-link"
+              style={{ color: "#7f56d9ff", fontSize: "17px" }}
+              onClick={() => navigate("/pastgoals")}
+            >
+              Achieved goals
+            </button>
+          </li>
+          <li>
+            <button
+              className="nav-link px-4 btn btn-link"
+              style={{ color: "#7f56d9ff", fontSize: "17px" }}
+              onClick={() => navigate("/budgetbuddy")}
+            >
+              Chat
+            </button>
+          </li>
+          <li>
+            <button
+              className="nav-link px-4 btn btn-link"
+              style={{ color: "#7f56d9ff", fontSize: "17px" }}
+              onClick={() => navigate("/dreamframe")}
+            >
+              Dream Frame
+            </button>
+          </li>
+        </ul>
+        <div className="col-md-3 text-end">
+          <button
+            className="btn me-2"
+            onClick={() => navigate("/login")}
+            style={{ background: "#7f56d955" }}
+          >
+            Logout
+          </button>
+        </div>
+      </header>
 
-      {/* BUDGET BUDDY CHAT */}
-      <div className="budget-buddy-bg py-5" style={{ backgroundColor: 'var(--light-purple)', minHeight: '80vh' }}>
-        <Container>
-          <h1 className="text-center text-purple mb-4 fw-bold">BudgetBuddy<img src={budgetbuddy} alt="Budget Buddy" width="60" height="60" style={{background:'transparent',mixBlendMode:'multiply'}}></img></h1>
-          <p className="text-center text-muted mb-5">Your smart personal finance assistant</p>
-
-          <Card className="shadow-lg p-4 chatbot-card">
-            <div className="chat-window mb-3">
-              {messages.map((msg, idx) => (
-                <div key={idx} className={`message ${msg.sender}`}>
-                  <strong>{msg.sender === 'user' ? 'You' : 'BudgetBuddy'}:</strong> {msg.text}
-                </div>
-              ))}
-            </div>
-
-            <InputGroup>
-              <FormControl
-                placeholder="Ask something about your finances..."
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+      {/* CHAT CONTENT */}
+      <main
+        className="goal-container container"
+        style={{ backgroundColor: "rgb(243, 240, 255)" }}
+      >
+        <div className="budget-buddy-bg py-5" style={{ backgroundColor: 'var(--light-purple)', minHeight: '80vh' }}>
+          <Container>
+            <h1 className="text-center text-purple mb-4 fw-bold">
+              BudgetBuddy
+              <img
+                src={budgetbuddy}
+                alt="Budget Buddy"
+                width="60"
+                height="60"
+                style={{ background: 'transparent', mixBlendMode: 'multiply', marginLeft: '10px' }}
               />
-              <Button variant="primary" className="btn-purple" onClick={handleSend}>
-                Send
-              </Button>
-            </InputGroup>
-          </Card>
-        </Container>
-      </div>
+            </h1>
+            <p className="text-center text-muted mb-5">
+              Your smart personal finance assistant
+            </p>
+
+            <Card className="shadow-lg p-4 chatbot-card" style={{ maxWidth: '700px', margin: '0 auto', borderRadius: '20px' }}>
+              <div
+                className="chat-window mb-3 p-3"
+                style={{
+                  background: '#fdfdfd',
+                  border: '1px solid #eee',
+                  borderRadius: '12px',
+                  height: '400px',
+                  overflowY: 'auto'
+                }}
+              >
+                {messages.length === 0 && (
+                  <div className="text-center text-muted">
+                    Start a conversation with BudgetBuddy!
+                  </div>
+                )}
+
+                {messages.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={`message mb-3 ${msg.sender}`}
+                    style={{
+                      display: 'flex',
+                      justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start'
+                    }}
+                  >
+                    <div
+                      style={{
+                        maxWidth: '75%',
+                        padding: '10px 15px',
+                        borderRadius: '15px',
+                        backgroundColor: msg.sender === 'user' ? 'var(--purple)' : '#eae6ff',
+                        color: msg.sender === 'user' ? 'white' : '#333',
+                        whiteSpace: 'pre-wrap',
+                        boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+                      }}
+                    >
+                      <strong style={{ fontSize: '0.9rem' }}>
+                        {msg.sender === 'user' ? 'You' : 'BudgetBuddy'}
+                      </strong>
+                      <div style={{ fontSize: '0.95rem', marginTop: '5px' }}>
+                        {msg.text}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <div ref={chatEndRef} />
+              </div>
+
+              <InputGroup>
+                <FormControl
+                  placeholder="Ask something about your finances..."
+                  value={userInput}
+                  onChange={(e) => setUserInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                  style={{ borderRadius: '12px 0 0 12px' }}
+                />
+                <Button
+                  variant="primary"
+                  className="btn-purple"
+                  onClick={handleSend}
+                  disabled={loading}
+                  style={{ borderRadius: '0 12px 12px 0', backgroundColor: 'var(--purple)', borderColor: 'var(--purple)' }}
+                >
+                  {loading ? "..." : "Send"}
+                </Button>
+              </InputGroup>
+            </Card>
+          </Container>
+        </div>
+      </main>
 
       {/* FOOTER */}
-      <footer className="text-center border-top py-4 mt-4 bg-white">
-        <img src={Harmoneylogo} alt="Harmoney" width="40" height="40" className="mb-2" />
-        <p className="mb-0">&copy; {new Date().getFullYear()} Harmoney, Inc. All rights reserved.</p>
-        <small className="text-muted">Built with 💜 to help you achieve your dreams.</small>
+      <footer className="text-center border-top py-4 mt-4">
+        <img
+          src={Harmoneylogo}
+          alt="Harmoney"
+          width="40"
+          height="40"
+          className="mb-2"
+        />
+        <p className="mb-0">
+          &copy; {new Date().getFullYear()} Harmoney, Inc. All rights reserved.
+        </p>
       </footer>
-    </>
+    </div>
   );
 };
 

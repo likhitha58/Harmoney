@@ -1,60 +1,33 @@
-:root {
-          --purple: #7F56D9;
-          --light-purple: #F3F0FF;
-          --soft-purple: #f9f8ff;
-        }
+.chat-panel {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+}
 
-        .text-purple {
-          color: var(--purple);
-        }
+.chat-box {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background: #fff;
+  border-radius: 10px;
+}
 
-        .nav-purple {
-          color: var(--purple);
-          font-size: 17px;
-        }
+.chat-message {
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  border-radius: 15px;
+  max-width: 70%;
+}
 
-        .btn-purple {
-          background-color: var(--purple);
-          border-color: var(--purple);
-          color: white;
-        }
+.chat-message.user {
+  background: #7f56d9;
+  color: white;
+  align-self: flex-end;
+  margin-left: auto;
+}
 
-        .btn-purple:hover {
-          background-color: #6b46c1;
-          border-color: #6b46c1;
-        }
-
-        .chatbot-card {
-          background-color: white;
-          border-radius: 16px;
-        }
-
-        .chat-window {
-          max-height: 400px;
-          overflow-y: auto;
-          padding: 1rem;
-          border: 1px solid #e0dff0;
-          border-radius: 12px;
-          background-color: var(--soft-purple);
-        }
-
-        .message {
-          margin-bottom: 12px;
-          padding: 10px 14px;
-          border-radius: 10px;
-          max-width: 80%;
-        }
-
-        .message.user {
-          background-color: var(--purple);
-          color: white;
-          align-self: flex-end;
-          margin-left: auto;
-        }
-
-        .message.bot {
-          background-color: white;
-          color: #333;
-          border: 1px solid #ddd;
-          margin-right: auto;
-        }
+.chat-message.bot {
+  background: #ececec;
+  color: #333;
+  align-self: flex-start;
+}

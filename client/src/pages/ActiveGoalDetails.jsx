@@ -147,7 +147,8 @@ const ActiveGoalDetails = () => {
                       Chat with <strong>BudgetBuddy</strong> for advice and tips.
                     </p>
                     <button
-                      className="btn btn-success"
+                      className="btn"
+                       style={{ backgroundColor: '#7F56D9',color:'white'}}
                       onClick={() => navigate("/budgetbuddy")}
                     >
                       Ask BudgetBuddy
