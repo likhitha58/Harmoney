@@ -22,6 +22,7 @@ const goalSchema = new mongoose.Schema(
       default: "Balanced" 
     },
     savingsPlan: [savingsPlanSchema],
+    dreamImage: { type: String },
   },
   { timestamps: true }
 );

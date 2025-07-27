@@ -116,6 +116,21 @@ const ActiveGoals = () => {
               {goals.map((goal) => (
                 <div className="col-md-6 mb-4" key={goal._id}>
                   <div className="card h-100 shadow-sm border-0">
+                    {/* DreamFrame Image */}
+                    {goal.dreamImage && (
+                      <img
+                        src={goal.dreamImage}
+                        alt="Dream visualization"
+                        className="card-img-top"
+                        style={{
+                          height: "200px",
+                          objectFit: "cover",
+                          borderTopLeftRadius: "0.25rem",
+                          borderTopRightRadius: "0.25rem",
+                        }}
+                      />
+                    )}
+
                     <div className="card-body">
                       <h5 className="card-title" style={{ color: "#7f56d9" }}>
                         {goal.title}
@@ -129,7 +144,7 @@ const ActiveGoals = () => {
                       </p>
                       <button
                         className="btn btn-sm"
-                        style={{ backgroundColor: '#7F56D9',color:'white'}}
+                        style={{ backgroundColor: "#7F56D9", color: "white" }}
                         onClick={() =>
                           navigate(`/activegoals/${goal._id}`)
                         }

@@ -36,6 +36,7 @@ export const createGoal = async (req, res) => {
       months,
       approach: riskProfile,
       savingsPlan,
+       status: "active",
     });
 
     await goal.save();

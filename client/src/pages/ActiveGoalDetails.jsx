@@ -17,7 +17,7 @@ const ActiveGoalDetails = () => {
         const res = await axios.get(`/api/goals`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // Find this goal by ID (or create a dedicated API endpoint later)
+        // Find this goal by ID
         const selected = res.data.find((g) => g._id === id);
         setGoal(selected);
       } catch (err) {
@@ -112,6 +112,23 @@ const ActiveGoalDetails = () => {
             <p className="text-center">Goal not found.</p>
           ) : (
             <>
+              {/* Dream Image */}
+              {goal.dreamImage && (
+                <div className="text-center mb-4">
+                  <img
+                    src={goal.dreamImage}
+                    alt="Dream visualization"
+                    style={{
+                      maxHeight: "300px",
+                      maxWidth: "100%",
+                      objectFit: "cover",
+                      borderRadius: "12px",
+                      boxShadow: "0 4px 8px rgba(0,0,0,0.1)"
+                    }}
+                  />
+                </div>
+              )}
+
               <h2 className="mb-4 text-center">{goal.title}</h2>
               <p className="text-center">{goal.description}</p>
               <p className="text-center">
@@ -148,7 +165,7 @@ const ActiveGoalDetails = () => {
                     </p>
                     <button
                       className="btn"
-                       style={{ backgroundColor: '#7F56D9',color:'white'}}
+                      style={{ backgroundColor: '#7F56D9', color: 'white' }}
                       onClick={() => navigate("/budgetbuddy")}
                     >
                       Ask BudgetBuddy

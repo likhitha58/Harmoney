@@ -4,6 +4,7 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import goalRoutes from './routes/goalRoutes.js';
 import chatRoutes from "./routes/chatRoutes.js";
+import dreamFrameRoutes from './routes/dreamFrameRoutes.js';
 
 const app = express();
 
@@ -16,8 +17,9 @@ connectDB();
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api', goalRoutes); // IMPORTANT: no /goals prefix
+app.use('/api', goalRoutes); 
 app.use("/api/chat", chatRoutes);
+app.use('/api/dreamframe', dreamFrameRoutes);
 // Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

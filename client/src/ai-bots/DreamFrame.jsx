@@ -1,6 +1,7 @@
-import React from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Container, Form, Button, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Harmoneylogo from '../assets/logo.png';
 import homeImg from '../assets/home.jpg';
 import gradImg from '../assets/grad.png';
@@ -12,8 +13,11 @@ import dreamframe from '../assets/FRAME.png';
 import '../styles/dreamFrame.css';
 
 const DreamFrame = () => {
-  const navigate = useNavigate();
-
+  const [prompt, setPrompt] = useState("");
+  const [generatedImage, setGeneratedImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [activeGoals, setActiveGoals] = useState([]);
+  const [selectedGoal, setSelectedGoal] = useState("");
   const sampleImages = [
     homeImg,
     gradImg,
@@ -22,11 +26,55 @@ const DreamFrame = () => {
     budgetImg,
     businessImg,
   ];
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    const fetchGoals = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const res = await axios.get("/api/goals/active", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setActiveGoals(res.data || []);
+      } catch (err) {
+        console.error("Failed to load goals", err);
+      }
+    };
+    fetchGoals();
+  }, []);
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add logic to generate an image based on the input
-    console.log("Generate image button clicked");
+    if (!prompt.trim()) return;
+
+    try {
+      setLoading(true);
+      setGeneratedImage(null);
+      const token = localStorage.getItem("token");
+
+      // Placeholder goalId (can be a dropdown later)
+      if (!selectedGoal) {
+        alert("Please select a goal");
+        setLoading(false);
+        return;
+      }
+      const goalId = selectedGoal;
+
+
+      const res = await axios.post(
+        "/api/dreamframe/generate",
+        { prompt, goalId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setGeneratedImage(res.data.imageUrl);
+    } catch (error) {
+      console.error("Error generating image", error);
+      alert("Failed to generate dream image. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -74,12 +122,54 @@ const DreamFrame = () => {
             <br /> Enter a dream prompt below to generate a meaningful image.
           </p>
           <Form className="mt-4" onSubmit={handleSubmit}>
+            <Form.Group controlId="goalSelect" className="mb-3">
+              <Form.Label className="form-label-purple">Select a goal</Form.Label>
+              <Form.Select
+                value={selectedGoal}
+                onChange={(e) => setSelectedGoal(e.target.value)}
+              >
+                <option value="">-- Choose a goal --</option>
+                {activeGoals.map((goal) => (
+                  <option key={goal._id} value={goal._id}>
+                    {goal.title}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+
             <Form.Group controlId="dreamText">
               <Form.Label className="form-label-purple">Enter your dream prompt</Form.Label>
-              <Form.Control type="text" placeholder="e.g., Describe yourself when you achieve your goal" />
+              <Form.Control
+                type="text"
+                placeholder="e.g., Describe yourself when you achieve your goal"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+              />
             </Form.Group>
-            <Button type="submit" className="mt-3" style={{ backgroundColor: '#7f56d9ce' }}>Generate Image</Button>
+
+            <Button type="submit" className="mt-3" style={{ backgroundColor: '#7f56d9ce' }}>
+              {loading ? (
+                <>
+                  <Spinner animation="border" size="sm" className="me-2" />
+                  Generating...
+                </>
+              ) : (
+                "Generate Image"
+              )}
+            </Button>
           </Form>
+
+
+          {generatedImage && (
+            <div className="mt-4">
+              <h5>Your Dream Visualization</h5>
+              <img
+                src={generatedImage}
+                alt="Dream"
+                style={{ maxWidth: '50%', borderRadius: '12px', marginTop: '15px' }}
+              />
+            </div>
+          )}
         </div>
       </div>
 
