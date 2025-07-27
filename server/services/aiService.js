@@ -1,4 +1,3 @@
-// server/services/aiService.js
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -12,11 +11,18 @@ export const getSavingsPlanFromAI = async (goalData) => {
     Monthly income: ${goalData.monthlyIncome}
     Monthly expenses: ${goalData.monthlyExpenses}
     Timeframe (months): ${goalData.months}
+    Risk profile: ${goalData.riskProfile}
+    Age group: ${goalData.ageGroup}
+
+    Consider the risk profile when recommending allocation:
+    - Conservative: more savings, less risky investments
+    - Balanced: mix of savings and moderate investments
+    - Aggressive: higher investments, less cash savings
 
     Format:
     [
-      {"month":1, "amount":5000},
-      {"month":2, "amount":4500}
+      {"month":1, "amount":5000, "allocation":"50% savings, 30% mutual funds, 20% emergency"},
+      {"month":2, "amount":4800, "allocation":"..."}
     ]
   `;
 
@@ -24,7 +30,6 @@ export const getSavingsPlanFromAI = async (goalData) => {
   const result = await model.generateContent(prompt);
   const text = result.response.text().trim();
 
-  // Extract JSON even if there’s extra text
   const jsonMatch = text.match(/\[[\s\S]*\]/);
   if (!jsonMatch) {
     console.error("AI did not return JSON:", text);
@@ -38,4 +43,3 @@ export const getSavingsPlanFromAI = async (goalData) => {
     return [];
   }
 };
-

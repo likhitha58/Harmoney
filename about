@@ -1,0 +1,27 @@
+ABOUT 
+
+Harmoney is a savings advisor web-app that helps users to take a hold on their expenditure and helps them focus on their savings depending on the goals they share
+
+User gives details about their age, name, job, salary, other income sources, major expenses etc. and their financial goals divided into major and minor
+
+Enter details of their goals, to be achieved in how many months, approx budget, priority , lon temr or short term etc
+
+Give output based on the user details. 
+
+Extra suggestions in ai chatbot. help, etc. 
+
+
+-> user authentication: login, signup, securityquestions, resetpassword
+
+->goal management: add goal, get output as savings plan through an ml model, track goal progress, goal status, editgoal, delete goal
+
+->budget plan: after getting the budget plan through ml model, add everyday tracking of planned vs actual savings
+
+->dashboard: goal progress and completion rate
+
+->dreamframe : ai image generator 
+
+->budgetbuddy: ai chatbot for financial suggestions
+
+->email notifications: progress sent for everyday tracking and reminder emails
+
