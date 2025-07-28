@@ -40,7 +40,7 @@ const AddGoal = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "http://localhost:5000/api/budget-plan",
+        "http://localhost:5000/api/goals/budget-plan",
         {
           ...formData,
           monthlyIncome: Number(formData.monthlyIncome) + (Number(formData.sideIncome) || 0),
