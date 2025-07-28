@@ -14,7 +14,7 @@ import BudgetBuddy from './ai-bots/BudgetBuddy';
 import ActiveGoals from './pages/ActiveGoals';
 import ActiveGoalDetails from "./pages/ActiveGoalDetails";
 import ProtectedRoute from './components/ProtectedRoute';
-
+import Dashboard from './pages/Dashboard';
 const App = () => {
   return (
     <Router>
@@ -84,6 +84,15 @@ const App = () => {
           element={
             <ProtectedRoute>
               <ActiveGoalDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
             </ProtectedRoute>
           }
         />
