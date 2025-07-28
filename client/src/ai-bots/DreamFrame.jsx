@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Form, Button, Spinner } from 'react-bootstrap';
+import { Container, Form, Button, Spinner, Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Harmoneylogo from '../assets/logo.png';
@@ -27,7 +27,7 @@ const DreamFrame = () => {
     businessImg,
   ];
   const navigate = useNavigate();
-
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   useEffect(() => {
     const fetchGoals = async () => {
       const token = localStorage.getItem("token");
@@ -91,6 +91,7 @@ const DreamFrame = () => {
               <img src={Harmoneylogo} alt="Harmoney Logo" width="60" height="60" />
             </button>
           </div>
+
           <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <li>
               <button className="nav-link px-4 btn btn-link" style={{ color: '#7f56d9ff', fontSize: '17px' }} onClick={() => navigate('/home')}>Home</button>
@@ -105,8 +106,36 @@ const DreamFrame = () => {
               <button className="nav-link px-4 btn btn-link" style={{ color: '#7f56d9ff', fontSize: '17px' }} onClick={() => navigate('/budgetbuddy')}>Chat</button>
             </li>
           </ul>
+
           <div className="col-md-3 text-end">
-            <button className="btn me-2" onClick={() => navigate('/login')} style={{ background: '#7f56d955' }}>Logout</button>
+            {user?.name ? (
+              <Dropdown align="end">
+                <Dropdown.Toggle style={{ background: '#7f56d9ce' }}>
+                  Hi, {user.name}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu style={{ background: '#7f56d955' }}>
+                  <Dropdown.Item onClick={() => navigate('/account')}>Account</Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item
+                    onClick={() => {
+                      localStorage.clear();
+                      navigate('/login');
+                    }}
+                  >
+                    Logout
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            ) : (
+              <button
+                className="btn me-2"
+                onClick={() => navigate('/login')}
+                style={{ background: '#7f56d955' }}
+              >
+                Logout
+              </button>
+            )}
           </div>
         </header>
       </div>

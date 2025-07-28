@@ -8,6 +8,7 @@ const Signup = () => {
   const navigate = useNavigate();
 
   // Add state for form inputs
+  const [name, setName] = useState("");
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -18,7 +19,7 @@ const Signup = () => {
       const res = await fetch('http://localhost:5000/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }), // use state values
+        body: JSON.stringify({ name, email, password }), // use state values
       });
 
       if (!res.ok) {
@@ -54,6 +55,14 @@ const Signup = () => {
             <p className="text-muted mb-4">Welcome to Harmoney. Start saving now!!</p>
 
             <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Full Name"
+                className="form-input"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
               <input
                 type="email"
                 placeholder="Email"

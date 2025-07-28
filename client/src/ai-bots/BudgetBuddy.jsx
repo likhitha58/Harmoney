@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Container, Card, Button, FormControl, InputGroup } from "react-bootstrap";
+import { Container, Card, Button, FormControl, InputGroup, Dropdown } from "react-bootstrap";
 import Harmoneylogo from "../assets/logo.png";
 import budgetbuddy from "../assets/bb.png";
 import "../styles/budgetBuddy.css";
@@ -15,7 +15,9 @@ const BudgetBuddy = () => {
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
 
-  // Scroll to bottom whenever messages update
+  // Get user info from localStorage
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -114,13 +116,36 @@ const BudgetBuddy = () => {
           </li>
         </ul>
         <div className="col-md-3 text-end">
-          <button
-            className="btn me-2"
-            onClick={() => navigate("/login")}
-            style={{ background: "#7f56d955" }}
-          >
-            Logout
-          </button>
+          {user?.name ? (
+            <Dropdown align="end">
+              <Dropdown.Toggle style={{ background: "#7f56d9ce" }}>
+                Hi, {user.name}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu style={{ background: "#7f56d955" }}>
+                <Dropdown.Item onClick={() => navigate("/account")}>
+                  Account
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate("/login");
+                  }}
+                >
+                  Logout
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          ) : (
+            <button
+              className="btn me-2"
+              onClick={() => navigate("/login")}
+              style={{ background: "#7f56d955" }}
+            >
+              Logout
+            </button>
+          )}
         </div>
       </header>
 

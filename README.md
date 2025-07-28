@@ -79,6 +79,6 @@ This project is licensed under the MIT License – free for personal and educati
 
 ---
 
-## 💡 Idea and Innovation
+## Idea and Innovation
 Built with <3 by **Likhitha Tanuboddi**  
 Connecting **finance, dreams, and design** – with Harmoney.

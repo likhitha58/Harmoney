@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Dropdown } from "react-bootstrap";
 import axios from "axios";
 import Harmoneylogo from "../assets/logo.png";
 import "../styles/activeGoals.css";
@@ -8,6 +9,9 @@ const ActiveGoals = () => {
   const navigate = useNavigate();
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Read user info from localStorage
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
     const fetchGoals = async () => {
@@ -87,13 +91,36 @@ const ActiveGoals = () => {
           </li>
         </ul>
         <div className="col-md-3 text-end">
-          <button
-            className="btn me-2"
-            onClick={() => navigate("/login")}
-            style={{ background: "#7f56d955" }}
-          >
-            Logout
-          </button>
+          {user?.name ? (
+            <Dropdown align="end">
+              <Dropdown.Toggle style={{ background: "#7f56d9ce" }}>
+                Hi, {user.name}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu style={{ background: "#7f56d955" }}>
+                <Dropdown.Item onClick={() => navigate("/account")}>
+                  Account
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate("/login");
+                  }}
+                >
+                  Logout
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          ) : (
+            <button
+              className="btn me-2"
+              onClick={() => navigate("/login")}
+              style={{ background: "#7f56d955" }}
+            >
+              Logout
+            </button>
+          )}
         </div>
       </header>
 
