@@ -47,29 +47,36 @@ export const createGoal = async (req, res) => {
   }
 };
 
+// Get only active (not completed) goals
 export const getGoals = async (req, res) => {
-  try {
-    const goals = await Goal.find({ userId: req.user.id });
-    res.json(goals);
-  } catch (err) {
-    console.error("Error fetching goals:", err);
-    res.status(500).json({ message: "Server Error" });
-  }
-};
-
-export const getActiveGoals = async (req, res) => {
   try {
     const goals = await Goal.find({
       userId: req.user.id,
-      status: "active", // filter only active goals
+      $or: [
+        { completed: false },
+        { status: "active" }
+      ]
     });
     res.json(goals);
-  } catch (error) {
-    console.error("Error fetching active goals:", error);
+  } catch (err) {
+    console.error("Error fetching goals:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
 
+
+// Get achieved (completed) goals
+export const getAchievedGoals = async (req, res) => {
+  try {
+    const achievedGoals = await Goal.find({
+      userId: req.user.id,
+      completed: true,
+    });
+    res.json(achievedGoals);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 export const updateGoal = async (req, res) => {
   try {
@@ -87,7 +94,8 @@ export const updateGoal = async (req, res) => {
 
     // If currentSavings >= targetAmount, mark as completed
     if (goal.currentSavings >= goal.targetAmount) {
-      goal.completed = true; // Add this field in your Goal schema if not already
+      goal.completed = true;
+      goal.status = "completed";  // Make sure to update the status
     }
 
     const updatedGoal = await goal.save();
@@ -97,7 +105,6 @@ export const updateGoal = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 
 // Delete goal by ID

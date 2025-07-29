@@ -5,10 +5,11 @@ import jwt from "jsonwebtoken";
 // REGISTER
 export const register = async (req, res) => {
   try {
-    const { name, email, password, securityQuestion, securityAnswer } = req.body;
+    const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: "Email already registered" });
+    if (existingUser)
+      return res.status(400).json({ message: "Email already registered" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -16,18 +17,21 @@ export const register = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      securityQuestion,
-      securityAnswer
+      securityQuestions: [] // initialize empty, will be filled later
     });
 
     await user.save();
-    console.log("JWT Secret loaded:", process.env.JWT_SECRET ? "Yes" : "No");
 
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({
+      message: "User registered successfully",
+      email: user.email // send email so frontend can use it
+    });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
+
 
 // LOGIN
 export const login = async (req, res) => {

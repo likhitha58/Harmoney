@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const savingsPlanSchema = new mongoose.Schema({
-  month: { type: Number, required: true },
-  amount: { type: Number, required: true },
-  allocation: { type: String },
+  month: Number,
+  amount: Number,
+  allocation: String
 });
 
 const goalSchema = new mongoose.Schema(
@@ -16,17 +16,19 @@ const goalSchema = new mongoose.Schema(
     monthlyIncome: { type: Number, required: true },
     monthlyExpenses: { type: Number, required: true },
     months: { type: Number, required: true },
-    approach: { 
-      type: String, 
-      enum: ["Safe & Steady", "Balanced", "Fast Track"], 
-      default: "Balanced" 
+    approach: {
+      type: String,
+      enum: ["Safe & Steady", "Balanced", "Fast Track"],
+      default: "Balanced",
     },
     savingsPlan: [savingsPlanSchema],
     dreamImage: { type: String },
     completed: { type: Boolean, default: false },
-
+    status: { type: String, default: "active" },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Goal", goalSchema);
+const Goal = mongoose.model("Goal", goalSchema);
+
+export default Goal;

@@ -18,16 +18,31 @@ const ActiveGoals = () => {
     const fetchGoals = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("/api/goals", {
-          headers: { Authorization: `Bearer ${token}` },
+        if (!token) {
+          console.error("No token found in localStorage");
+          navigate("/login");
+          return;
+        }
+
+        const res = await axios.get("http://localhost:5000/api/goals", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
+
         setGoals(res.data);
       } catch (err) {
         console.error("Error fetching active goals", err);
+        if (err.response?.status === 401) {
+          // Token invalid or expired
+          localStorage.clear();
+          navigate("/login");
+        }
       } finally {
         setLoading(false);
       }
     };
+
     fetchGoals();
   }, []);
 

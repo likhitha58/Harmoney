@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, Button } from "react-bootstrap";
 import axios from "axios";
 import Footer from "../components/Footer";
 import '../styles/addGoal.css';
-import Harmoneylogo from "../assets/logo.png"; // adjust path
+import Harmoneylogo from "../assets/logo.png";
 
 const AddGoal = () => {
   const navigate = useNavigate();
   const [showSideIncome, setShowSideIncome] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -25,7 +26,6 @@ const AddGoal = () => {
 
   const [plan, setPlan] = useState(null);
 
-  // Retrieve user info from localStorage
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const handleChange = (e) => {
@@ -42,21 +42,26 @@ const AddGoal = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
         "http://localhost:5000/api/goals/budget-plan",
         {
           ...formData,
-          monthlyIncome: Number(formData.monthlyIncome) + (Number(formData.sideIncome) || 0),
+          monthlyIncome:
+            Number(formData.monthlyIncome) + (Number(formData.sideIncome) || 0),
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setPlan(res.data);
     } catch (err) {
       console.error("Error generating plan", err);
+    } finally {
+      setLoading(false);
     }
   };
+
 
   return (
     <div className="container">
@@ -294,7 +299,16 @@ const AddGoal = () => {
           </form>
         </div>
 
-        {plan && plan.savingsPlan && (
+        {loading && (
+          <div className="glass-panel mt-4 p-4 text-center">
+            <div className="spinner-border mb-3" role="status" style={{ color: '#7f56d9ce' }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p>Generating your plan, please wait...</p>
+          </div>
+        )}
+
+        {!loading && plan?.savingsPlan && (
           <div className="glass-panel mt-4 p-4">
             <h4 className="mb-3 text-center">Your Simple Savings Plan</h4>
             <p className="text-muted">
@@ -304,10 +318,10 @@ const AddGoal = () => {
             </p>
 
             <p>
-              <strong>Goal:</strong> {plan.title} – {plan.description}
+              <strong>Goal:</strong> {plan.title || "Untitled"} – {plan.description || ""}
             </p>
             <p>
-              <strong>Target:</strong> ₹{plan.targetAmount} in {plan.months} months
+              <strong>Target:</strong> ₹{plan.targetAmount ?? 0} in {plan.months ?? 0} months
             </p>
 
             <div className="table-responsive">
@@ -322,16 +336,15 @@ const AddGoal = () => {
                 <tbody>
                   {plan.savingsPlan.map((item, idx) => (
                     <tr key={idx}>
-                      <td>{item.month}</td>
-                      <td>{item.amount.toLocaleString()}</td>
-                      <td>{item.allocation || "N/A"}</td>
+                      <td>{item?.month || `Month ${idx + 1}`}</td>
+                      <td>{item?.amount !== undefined ? item.amount.toLocaleString() : 0}</td>
+                      <td>{item?.allocation || "N/A"}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
 
-            {/* Save Goal Button */}
             <div className="text-center mt-3">
               <button
                 className="btn btn-primary me-3"
@@ -339,16 +352,16 @@ const AddGoal = () => {
               >
                 Save Goal
               </button>
-              <button
-                className="btn btn-success"
+              <Button
+                style={{ background: '#7f56d9ce' }}
                 onClick={() => navigate("/budgetbuddy")}
+                className="me-2"
               >
                 Ask BudgetBuddy
-              </button>
+              </Button>
             </div>
           </div>
         )}
-
       </main>
 
       {/* FOOTER */}

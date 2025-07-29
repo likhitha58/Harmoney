@@ -29,13 +29,15 @@ const DreamFrame = () => {
   ];
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   useEffect(() => {
     const fetchGoals = async () => {
       const token = localStorage.getItem("token");
       try {
-        const res = await axios.get("/api/goals/active", {
+        const res = await axios.get("/api/goals", {
           headers: { Authorization: `Bearer ${token}` }
         });
+        console.log("Active goals fetched:", res.data);
         setActiveGoals(res.data || []);
       } catch (err) {
         console.error("Failed to load goals", err);
@@ -43,7 +45,6 @@ const DreamFrame = () => {
     };
     fetchGoals();
   }, []);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,18 +55,15 @@ const DreamFrame = () => {
       setGeneratedImage(null);
       const token = localStorage.getItem("token");
 
-      // Placeholder goalId (can be a dropdown later)
       if (!selectedGoal) {
         alert("Please select a goal");
         setLoading(false);
         return;
       }
-      const goalId = selectedGoal;
-
 
       const res = await axios.post(
         "/api/dreamframe/generate",
-        { prompt, goalId },
+        { prompt, goalId: selectedGoal },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -159,11 +157,15 @@ const DreamFrame = () => {
                 onChange={(e) => setSelectedGoal(e.target.value)}
               >
                 <option value="">-- Choose a goal --</option>
-                {activeGoals.map((goal) => (
-                  <option key={goal._id} value={goal._id}>
-                    {goal.title}
-                  </option>
-                ))}
+                {activeGoals.length === 0 ? (
+                  <option disabled>No active goals found</option>
+                ) : (
+                  activeGoals.map((goal) => (
+                    <option key={goal._id} value={goal._id}>
+                      {goal.title || `Goal (${goal._id})`}
+                    </option>
+                  ))
+                )}
               </Form.Select>
             </Form.Group>
 
@@ -188,7 +190,6 @@ const DreamFrame = () => {
               )}
             </Button>
           </Form>
-
 
           {generatedImage && (
             <div className="mt-4">
@@ -218,7 +219,7 @@ const DreamFrame = () => {
         </div>
       </div>
 
-     <Footer />
+      <Footer />
     </>
   );
 };

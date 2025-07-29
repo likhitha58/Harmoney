@@ -2,8 +2,8 @@ import express from "express";
 import {
   createGoal,
   getGoals,
+  getAchievedGoals,
   updateGoal,
-  getActiveGoals,
   deleteGoal
 } from "../controllers/goalController.js";
 import { protect } from "../middleware/authMiddleware.js";
@@ -16,11 +16,10 @@ router.post("/goals/budget-plan", protect, createGoal);
 // Get all user goals
 router.get("/goals", protect, getGoals);
 
+router.get("/goals/achieved", protect, getAchievedGoals);
+
 // Update a goal by ID
 router.put("/goals/:id", protect, updateGoal);
-
-// Get only active goals
-router.get("/goals/active", protect, getActiveGoals);
 
 //delete goal by id
 router.delete("/goals/:id", protect, deleteGoal);

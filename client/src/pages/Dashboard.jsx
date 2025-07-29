@@ -20,8 +20,13 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   // Derived data
-  const activeGoals = goals.filter((g) => !g.completed);
-  const completedGoals = goals.filter((g) => g.completed);
+  const completedGoals = goals.filter(
+    (g) => g.completed || g.status === "completed"
+  );
+  const activeGoals = goals.filter(
+    (g) => !g.completed && g.status !== "completed"
+  );
+
 
   const totalSaved = goals.reduce((acc, g) => acc + (g.currentSavings || 0), 0);
   const totalTarget = goals.reduce((acc, g) => acc + (g.targetAmount || 0), 0);
@@ -216,6 +221,7 @@ const Dashboard = () => {
               </Col>
             ))}
           </Row>
+
 
           {/* Donut Chart */}
           <div

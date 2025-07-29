@@ -263,9 +263,6 @@ const WelcomePage = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <Footer />
-
       {/* About Modal */}
       <Modal show={showAboutModal} onHide={handleClose} centered className="about-modal">
         <Modal.Header closeButton className="border-0 justify-content-center">

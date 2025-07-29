@@ -14,6 +14,7 @@ const ActiveGoalDetails = () => {
   const [goal, setGoal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [celebrationMessage, setCelebrationMessage] = useState("");
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -37,41 +38,50 @@ const ActiveGoalDetails = () => {
   }, [id]);
 
   const handleUpdateGoal = async (e) => {
-  e.preventDefault();
-  try {
-    const token = localStorage.getItem("token");
-    const res = await axios.put(
-      `/api/goals/${id}`,
-      {
-        title: goal.title,
-        description: goal.description,
-        currentSavings: goal.currentSavings,
-      },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.put(
+        `/api/goals/${id}`,
+        {
+          title: goal.title,
+          description: goal.description,
+          currentSavings: goal.currentSavings,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    const updatedGoal = res.data;
+      const updatedGoal = res.data;
 
-    // If completed, show confetti animation
-    if (updatedGoal.completed) {
-      setShowEditModal(false);
-      // Trigger confetti animation
-      confetti({
-        particleCount: 200,
-        spread: 100,
-        origin: { y: 0.6 },
-      });
-      setTimeout(() => {
-        navigate("/pastgoals"); // Move to achieved goals page
-      }, 2000);
-    } else {
-      setShowEditModal(false);
-      navigate("/dashboard");
+      if (updatedGoal.completed) {
+        setShowEditModal(false);
+
+        // Set message to show in UI
+        setCelebrationMessage(
+          `🎉 Congratulations! You have successfully achieved your goal of "${updatedGoal.title}" 🎉`
+        );
+
+        // Confetti animation
+        confetti({
+          particleCount: 200,
+          spread: 100,
+          origin: { y: 0.6 },
+        });
+
+        // After 2 seconds, navigate to achieved goals page
+        setTimeout(() => {
+          setCelebrationMessage(""); // clear message
+          navigate("/pastgoals");
+        }, 2000);
+      } else {
+        setShowEditModal(false);
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.error("Error updating goal", err);
     }
-  } catch (err) {
-    console.error("Error updating goal", err);
-  }
-};
+  };
+
 
   const handleDeleteGoal = async () => {
     if (!window.confirm("Are you sure you want to delete this goal? This action cannot be undone.")) {
@@ -245,13 +255,17 @@ const ActiveGoalDetails = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {goal.savingsPlan.map((item, idx) => (
-                        <tr key={idx}>
-                          <td>{item.month}</td>
-                          <td>{item.amount.toLocaleString()}</td>
-                          <td>{item.allocation || "N/A"}</td>
-                        </tr>
-                      ))}
+                      {goal.savingsPlan.map((item, idx) => {
+  const amount = item.amount ?? item.amountToSave ?? 0;
+  return (
+    <tr key={idx}>
+      <td>{item.month || `Month ${idx + 1}`}</td>
+      <td>{amount.toLocaleString()}</td>
+      <td>{item.allocation || "N/A"}</td>
+    </tr>
+  );
+})}
+
                     </tbody>
                   </table>
                 </div>
@@ -259,6 +273,12 @@ const ActiveGoalDetails = () => {
             </>
           )}
         </div>
+        {celebrationMessage && (
+          <div className="text-center p-4 my-4" style={{ background: "#e6e1fc", borderRadius: "12px" }}>
+            <h3 style={{ color: "#7F56D9" }}>{celebrationMessage}</h3>
+          </div>
+        )}
+
       </main>
 
       {/* Modal for Editing */}

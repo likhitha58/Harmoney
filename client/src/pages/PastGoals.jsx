@@ -2,31 +2,31 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Footer from "../components/Footer";
-import { Card, Button, Row, Col } from "react-bootstrap";
+import { Card, Button, Row, Col, Dropdown } from "react-bootstrap";
 import Harmoneylogo from "../assets/logo.png";
 
 const PastGoals = () => {
   const navigate = useNavigate();
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
-
+const user = JSON.parse(localStorage.getItem("user") || "{}");
   useEffect(() => {
-    const fetchGoals = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get("/api/goals", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const completed = res.data.filter((g) => g.completed);
-        setGoals(completed);
-      } catch (err) {
-        console.error("Error fetching achieved goals", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchGoals();
-  }, []);
+  const fetchGoals = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get("/api/goals/achieved", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setGoals(res.data); // Use res.data, not completed
+    } catch (err) {
+      console.error("Error fetching achieved goals", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchGoals();
+}, []);
+
 
   const cardBaseStyle = {
     boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
@@ -86,15 +86,54 @@ const PastGoals = () => {
               Achieved goals
             </button>
           </li>
+          <li>
+            <button
+              className="nav-link px-4 btn btn-link"
+              style={{ color: "#7f56d9ff", fontSize: "17px" }}
+              onClick={() => navigate("/budgetbuddy")}
+            >
+              Chat
+            </button>
+          </li>
+          <li>
+            <button
+              className="nav-link px-4 btn btn-link"
+              style={{ color: "#7f56d9ff", fontSize: "17px" }}
+              onClick={() => navigate("/dreamframe")}
+            >
+              Dream Frame
+            </button>
+          </li>
         </ul>
         <div className="col-md-3 text-end">
-          <button
-            className="btn me-2"
-            onClick={() => navigate("/login")}
-            style={{ background: "#7f56d955" }}
-          >
-            Logout
-          </button>
+          {user?.name ? (
+            <Dropdown align="end">
+              <Dropdown.Toggle style={{ background: '#7f56d9ce' }}>
+                Hi, {user.name}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu style={{ background: '#7f56d955' }}>
+                <Dropdown.Item onClick={() => navigate('/account')}>Account</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate('/login');
+                  }}
+                >
+                  Logout
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          ) : (
+            <button
+              className="btn me-2"
+              onClick={() => navigate("/login")}
+              style={{ background: "#7f56d955" }}
+            >
+              Logout
+            </button>
+          )}
         </div>
       </header>
 
