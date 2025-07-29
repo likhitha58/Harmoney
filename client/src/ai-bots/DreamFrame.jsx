@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Spinner, Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import Footer from "../components/Footer";
 import axios from 'axios';
 import Harmoneylogo from '../assets/logo.png';
 import homeImg from '../assets/home.jpg';
@@ -217,12 +218,7 @@ const DreamFrame = () => {
         </div>
       </div>
 
-      {/* FOOTER */}
-      <footer className="text-center border-top py-4 mt-4">
-        <img src={Harmoneylogo} alt="Harmoney" width="40" height="40" className="mb-2" />
-        <p className="mb-0">&copy; {new Date().getFullYear()} Harmoney, Inc. All rights reserved.</p>
-        <small className="text-muted">Built with 💜 to help you achieve your dreams.</small>
-      </footer>
+     <Footer />
     </>
   );
 };

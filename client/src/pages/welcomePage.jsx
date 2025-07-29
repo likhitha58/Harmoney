@@ -264,22 +264,7 @@ const WelcomePage = () => {
       </div>
 
       {/* Footer */}
-      <footer className="container border-top py-4 mt-5">
-        <div className="row align-items-center justify-content-between">
-          <div className="col-md-6 d-flex align-items-center">
-            <img
-              src={Harmoneylogo}
-              alt="Harmoney"
-              width="60"
-              height="60"
-              className="me-2"
-            />
-            <span style={{ fontSize: 20, color: '#000000ff' }}>
-              © {new Date().getFullYear()} Harmoney, Inc
-            </span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* About Modal */}
       <Modal show={showAboutModal} onHide={handleClose} centered className="about-modal">

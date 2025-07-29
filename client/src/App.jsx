@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import Footer from './components/Footer';
 import Signup from './pages/signup';
 import Login from './pages/login';
 import SecurityQuestions from './pages/SecurityQuestions';
@@ -22,6 +23,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<WelcomePage />} />
+        <Route path="/footer" element={<Footer/>} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/SecurityQuestions" element={<SecurityQuestions />} />

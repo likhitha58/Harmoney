@@ -5,6 +5,7 @@ import { Container, Card, Button, FormControl, InputGroup, Dropdown } from "reac
 import Harmoneylogo from "../assets/logo.png";
 import budgetbuddy from "../assets/bb.png";
 import "../styles/budgetBuddy.css";
+import Footer from "../components/Footer";
 
 const BudgetBuddy = () => {
   const navigate = useNavigate();
@@ -242,19 +243,7 @@ const BudgetBuddy = () => {
         </div>
       </main>
 
-      {/* FOOTER */}
-      <footer className="text-center border-top py-4 mt-4">
-        <img
-          src={Harmoneylogo}
-          alt="Harmoney"
-          width="40"
-          height="40"
-          className="mb-2"
-        />
-        <p className="mb-0">
-          &copy; {new Date().getFullYear()} Harmoney, Inc. All rights reserved.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 };
