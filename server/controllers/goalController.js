@@ -56,3 +56,40 @@ export const getGoals = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
+
+export const getActiveGoals = async (req, res) => {
+  try {
+    const goals = await Goal.find({
+      userId: req.user.id,
+      status: "active", // filter only active goals
+    });
+    res.json(goals);
+  } catch (error) {
+    console.error("Error fetching active goals:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export const updateGoal = async (req, res) => {
+  try {
+    const goal = await Goal.findOne({ _id: req.params.id, userId: req.user.id });
+    if (!goal) {
+      return res.status(404).json({ message: "Goal not found" });
+    }
+
+    // Update fields
+    goal.title = req.body.title || goal.title;
+    goal.description = req.body.description || goal.description;
+    goal.currentSavings =
+      req.body.currentSavings !== undefined
+        ? req.body.currentSavings
+        : goal.currentSavings;
+
+    const updatedGoal = await goal.save();
+    res.json(updatedGoal);
+  } catch (err) {
+    console.error("Error updating goal:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};

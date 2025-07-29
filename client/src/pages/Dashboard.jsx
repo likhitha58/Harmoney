@@ -27,7 +27,7 @@ const Dashboard = () => {
 
   const getSaved = (goal) => goal.currentSavings || 0;
 
-  // Chart data (useMemo to avoid rerenders)
+  // Chart data with animation
   const data = useMemo(
     () => ({
       labels: ["Saved", "Remaining"],
@@ -49,6 +49,12 @@ const Dashboard = () => {
       plugins: {
         legend: { display: false },
         tooltip: { enabled: true },
+      },
+      animation: {
+        animateRotate: true,
+        animateScale: true,
+        duration: 1500,
+        easing: "easeOutCubic",
       },
     }),
     []
@@ -72,6 +78,22 @@ const Dashboard = () => {
   }, []);
 
   if (loading) return <p className="text-center">Loading...</p>;
+
+  // Card style with hover effects
+  const cardBaseStyle = {
+    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+    border: "none",
+    borderRadius: "12px",
+    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+    cursor: "pointer",
+  };
+
+  const handleCardHover = (e, isEnter) => {
+    e.currentTarget.style.transform = isEnter ? "translateY(-5px)" : "none";
+    e.currentTarget.style.boxShadow = isEnter
+      ? "0 8px 15px rgba(0,0,0,0.2)"
+      : "0 2px 5px rgba(0,0,0,0.1)";
+  };
 
   return (
     <div className="container">
@@ -167,63 +189,30 @@ const Dashboard = () => {
 
           {/* Overview Cards */}
           <Row className="mb-4 text-center">
-            <Col md={3}>
-              <Card
-                style={{
-                  boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                  border: "none",
-                  borderRadius: "12px",
-                }}
-              >
-                <Card.Body>
-                  <Card.Title>Total Goals</Card.Title>
-                  <h3>{goals.length}</h3>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={3}>
-              <Card
-                style={{
-                  boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                  border: "none",
-                  borderRadius: "12px",
-                }}
-              >
-                <Card.Body>
-                  <Card.Title>Active Goals</Card.Title>
-                  <h3>{activeGoals.length}</h3>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={3}>
-              <Card
-                style={{
-                  boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                  border: "none",
-                  borderRadius: "12px",
-                }}
-              >
-                <Card.Body>
-                  <Card.Title>Completed Goals</Card.Title>
-                  <h3>{completedGoals.length}</h3>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={3}>
-              <Card
-                style={{
-                  boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                  border: "none",
-                  borderRadius: "12px",
-                }}
-              >
-                <Card.Body>
-                  <Card.Title>Total Saved</Card.Title>
-                  <h3>₹{totalSaved.toLocaleString()}</h3>
-                  <small>of ₹{totalTarget.toLocaleString()}</small>
-                </Card.Body>
-              </Card>
-            </Col>
+            {[
+              { title: "Total Goals", value: goals.length },
+              { title: "Active Goals", value: activeGoals.length },
+              { title: "Completed Goals", value: completedGoals.length },
+              {
+                title: "Total Saved",
+                value: `₹${totalSaved.toLocaleString()}`,
+                sub: `of ₹${totalTarget.toLocaleString()}`,
+              },
+            ].map((card, index) => (
+              <Col md={3} key={index} className="mb-3">
+                <Card
+                  style={cardBaseStyle}
+                  onMouseEnter={(e) => handleCardHover(e, true)}
+                  onMouseLeave={(e) => handleCardHover(e, false)}
+                >
+                  <Card.Body>
+                    <Card.Title>{card.title}</Card.Title>
+                    <h3>{card.value}</h3>
+                    {card.sub && <small>{card.sub}</small>}
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
           </Row>
 
           {/* Donut Chart */}
@@ -270,10 +259,11 @@ const Dashboard = () => {
                   key={goal._id}
                   className="mb-3"
                   style={{
-                    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                    border: "none",
-                    borderRadius: "12px",
+                    ...cardBaseStyle,
+                    padding: "10px",
                   }}
+                  onMouseEnter={(e) => handleCardHover(e, true)}
+                  onMouseLeave={(e) => handleCardHover(e, false)}
                 >
                   <Card.Body>
                     <Card.Title>{goal.title}</Card.Title>

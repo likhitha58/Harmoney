@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import Harmoneylogo from "../assets/logo.png";
 import "../styles/activeGoals.css";
@@ -8,10 +8,11 @@ import "../styles/activeGoals.css";
 const ActiveGoalDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [goal, setGoal] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showEditModal, setShowEditModal] = useState(false);
 
-  // Get logged-in user info from localStorage
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
@@ -21,9 +22,9 @@ const ActiveGoalDetails = () => {
         const res = await axios.get(`/api/goals`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // Find this goal by ID
         const selected = res.data.find((g) => g._id === id);
         setGoal(selected);
+
       } catch (err) {
         console.error("Error fetching goal details", err);
       } finally {
@@ -32,6 +33,27 @@ const ActiveGoalDetails = () => {
     };
     fetchGoal();
   }, [id]);
+
+  const handleUpdateGoal = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `/api/goals/${id}`,
+        {
+          title: goal.title,
+          description: goal.description,
+          currentSavings: goal.currentSavings,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert("Goal updated successfully!");
+      setShowEditModal(false);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Error updating goal", err);
+    }
+  };
 
   return (
     <div className="container">
@@ -139,7 +161,6 @@ const ActiveGoalDetails = () => {
             <p className="text-center">Goal not found.</p>
           ) : (
             <>
-              {/* Dream Image */}
               {goal.dreamImage && (
                 <div className="text-center mb-4">
                   <img
@@ -150,7 +171,7 @@ const ActiveGoalDetails = () => {
                       maxWidth: "100%",
                       objectFit: "cover",
                       borderRadius: "12px",
-                      boxShadow: "0 4px 8px rgba(0,0,0,0.1)"
+                      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
                     }}
                   />
                 </div>
@@ -161,49 +182,102 @@ const ActiveGoalDetails = () => {
               <p className="text-center">
                 <strong>Target:</strong> ₹{goal.targetAmount} in {goal.months} months
               </p>
+              <p className="text-center">
+                <strong>Current Savings:</strong> ₹{goal.currentSavings || 0}
+              </p>
 
+              {/* Edit Button */}
+              <div className="text-center mb-4">
+                <Button
+                  style={{ backgroundColor: "#7F56D9", borderColor: "#7F56D9" }}
+                  onClick={() => setShowEditModal(true)}
+                >
+                  Edit Goal
+                </Button>
+              </div>
+
+              {/* Savings Plan Table */}
               {goal.savingsPlan && (
-                <>
-                  <div className="table-responsive mt-4">
-                    <table className="table table-bordered text-center">
-                      <thead>
-                        <tr>
-                          <th>Month</th>
-                          <th>Amount to Save (₹)</th>
-                          <th>Recommended Allocation</th>
+                <div className="table-responsive mt-4">
+                  <table className="table table-bordered text-center">
+                    <thead>
+                      <tr>
+                        <th>Month</th>
+                        <th>Amount to Save (₹)</th>
+                        <th>Recommended Allocation</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {goal.savingsPlan.map((item, idx) => (
+                        <tr key={idx}>
+                          <td>{item.month}</td>
+                          <td>{item.amount.toLocaleString()}</td>
+                          <td>{item.allocation || "N/A"}</td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {goal.savingsPlan.map((item, idx) => (
-                          <tr key={idx}>
-                            <td>{item.month}</td>
-                            <td>{item.amount.toLocaleString()}</td>
-                            <td>{item.allocation || "N/A"}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div className="text-center mt-4">
-                    <p>
-                      Need help understanding or sticking to this plan? <br />
-                      Chat with <strong>BudgetBuddy</strong> for advice and tips.
-                    </p>
-                    <button
-                      className="btn"
-                      style={{ backgroundColor: '#7F56D9', color: 'white' }}
-                      onClick={() => navigate("/budgetbuddy")}
-                    >
-                      Ask BudgetBuddy
-                    </button>
-                  </div>
-                </>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               )}
             </>
           )}
         </div>
       </main>
+
+      {/* Modal for Editing */}
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)} centered>
+        <Modal.Header closeButton style={{ background: '#7f56d9ce' }}>
+          <Modal.Title >Edit Goal</Modal.Title>
+        </Modal.Header>
+        <Form onSubmit={handleUpdateGoal} style={{ background: '#7f56d955' }}>
+          <Modal.Body>
+            {goal && (
+              <>
+                <Form.Group className="mb-3">
+                  <Form.Label>Title</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={goal.title}
+                    onChange={(e) => setGoal({ ...goal, title: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    value={goal.description}
+                    onChange={(e) =>
+                      setGoal({ ...goal, description: e.target.value })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Current Savings (₹)</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={goal.currentSavings || 0}
+                    onChange={(e) =>
+                      setGoal({
+                        ...goal,
+                        currentSavings: Number(e.target.value),
+                      })
+                    }
+                  />
+                </Form.Group>
+              </>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button style={{ background: "#7f56d955" }} onClick={() => setShowEditModal(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" style={{ background: '#7f56d9ce' }}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
 
       {/* FOOTER */}
       <footer className="text-center border-top py-4 mt-4">
