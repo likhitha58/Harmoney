@@ -21,6 +21,7 @@ const Dashboard = () => {
   // Derived data
   const activeGoals = goals.filter((g) => !g.completed);
   const completedGoals = goals.filter((g) => g.completed);
+
   const totalSaved = goals.reduce((acc, g) => acc + (g.currentSavings || 0), 0);
   const totalTarget = goals.reduce((acc, g) => acc + (g.targetAmount || 0), 0);
   const savingsPercent = totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
@@ -271,7 +272,25 @@ const Dashboard = () => {
                     <ProgressBar
                       now={percentage}
                       label={`${percentage.toFixed(0)}%`}
-                    />
+                      style={{
+                        background: "#e0d7ff", // light background for track
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: `${percentage}%`,
+                          backgroundColor: "#7f56d9ce",
+                          height: "100%",
+                          borderRadius: "0.25rem",
+                          textAlign: "center",
+                          color: "#fff",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {`${percentage.toFixed(0)}%`}
+                      </div>
+                    </ProgressBar>
+
                     <div className="mt-2">
                       ₹{saved.toLocaleString()} / ₹
                       {goal.targetAmount.toLocaleString()}
@@ -286,24 +305,21 @@ const Dashboard = () => {
           <div className="text-center mt-4">
             <Button
               className="me-2"
-              style={{
-                backgroundColor: "#7F56D9",
-                borderColor: "#7F56D9",
-              }}
+              style={{ background: '#7f56d955' }}
               onClick={() => navigate("/activegoals")}
             >
               View Active Goals
             </Button>
             <Button
-              variant="secondary"
+              style={{ background: '#7f56d9ce' }}
               onClick={() => navigate("/pastgoals")}
               className="me-2"
             >
               View Achieved Goals
             </Button>
             <Button
-              variant="success"
-              onClick={() => navigate("/addgoal")}
+              style={{ background: 'white', color: 'black' }}
+              onClick={() => navigate("/add-goal")}
             >
               + Create Goal
             </Button>

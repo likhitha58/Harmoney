@@ -23,6 +23,8 @@ const goalSchema = new mongoose.Schema(
     },
     savingsPlan: [savingsPlanSchema],
     dreamImage: { type: String },
+    completed: { type: Boolean, default: false },
+
   },
   { timestamps: true }
 );

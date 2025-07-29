@@ -15,6 +15,8 @@ import ActiveGoals from './pages/ActiveGoals';
 import ActiveGoalDetails from "./pages/ActiveGoalDetails";
 import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
+import PastGoals from "./pages/PastGoals";
+
 const App = () => {
   return (
     <Router>
@@ -93,6 +95,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pastgoals"
+          element={
+            <ProtectedRoute>
+              <PastGoals />
             </ProtectedRoute>
           }
         />

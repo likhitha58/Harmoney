@@ -78,7 +78,6 @@ export const updateGoal = async (req, res) => {
       return res.status(404).json({ message: "Goal not found" });
     }
 
-    // Update fields
     goal.title = req.body.title || goal.title;
     goal.description = req.body.description || goal.description;
     goal.currentSavings =
@@ -86,10 +85,36 @@ export const updateGoal = async (req, res) => {
         ? req.body.currentSavings
         : goal.currentSavings;
 
+    // If currentSavings >= targetAmount, mark as completed
+    if (goal.currentSavings >= goal.targetAmount) {
+      goal.completed = true; // Add this field in your Goal schema if not already
+    }
+
     const updatedGoal = await goal.save();
     res.json(updatedGoal);
   } catch (err) {
     console.error("Error updating goal:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+// Delete goal by ID
+export const deleteGoal = async (req, res) => {
+  try {
+    const goal = await Goal.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.id,
+    });
+
+    if (!goal) {
+      return res.status(404).json({ message: "Goal not found" });
+    }
+
+    res.json({ message: "Goal deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting goal:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
