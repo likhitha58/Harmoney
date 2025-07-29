@@ -52,10 +52,8 @@ export const getGoals = async (req, res) => {
   try {
     const goals = await Goal.find({
       userId: req.user.id,
-      $or: [
-        { completed: false },
-        { status: "active" }
-      ]
+      completed: false,
+      status: "active",
     });
     res.json(goals);
   } catch (err) {
@@ -63,6 +61,8 @@ export const getGoals = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
 
 
 // Get achieved (completed) goals

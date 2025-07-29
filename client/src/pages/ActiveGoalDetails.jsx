@@ -256,15 +256,15 @@ const ActiveGoalDetails = () => {
                     </thead>
                     <tbody>
                       {goal.savingsPlan.map((item, idx) => {
-  const amount = item.amount ?? item.amountToSave ?? 0;
-  return (
-    <tr key={idx}>
-      <td>{item.month || `Month ${idx + 1}`}</td>
-      <td>{amount.toLocaleString()}</td>
-      <td>{item.allocation || "N/A"}</td>
-    </tr>
-  );
-})}
+                        const amount = item.amount ?? item.amountToSave ?? 0;
+                        return (
+                          <tr key={idx}>
+                            <td>{item.month || `Month ${idx + 1}`}</td>
+                            <td>{amount.toLocaleString()}</td>
+                            <td>{item.allocation || "N/A"}</td>
+                          </tr>
+                        );
+                      })}
 
                     </tbody>
                   </table>

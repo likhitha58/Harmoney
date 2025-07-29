@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import axios from "axios";
 import Harmoneylogo from "../assets/logo.png";
-import { Row, Col, Card, Button, ProgressBar } from "react-bootstrap";
+import { Row, Col, Card, Button, ProgressBar, Dropdown } from "react-bootstrap";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -16,25 +16,23 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [goals, setGoals] = useState([]);
+
+  // User info for dropdown
+  const [user, setUser] = useState(null);
+
+  // Goals state
+  const [activeGoals, setActiveGoals] = useState([]);
+  const [completedGoals, setCompletedGoals] = useState([]);
+  const [allGoals, setAllGoals] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Derived data
-  const completedGoals = goals.filter(
-    (g) => g.completed || g.status === "completed"
-  );
-  const activeGoals = goals.filter(
-    (g) => !g.completed && g.status !== "completed"
-  );
-
-
-  const totalSaved = goals.reduce((acc, g) => acc + (g.currentSavings || 0), 0);
-  const totalTarget = goals.reduce((acc, g) => acc + (g.targetAmount || 0), 0);
+  // Compute totals
+  const totalSaved = allGoals.reduce((acc, g) => acc + (g.currentSavings || 0), 0);
+  const totalTarget = allGoals.reduce((acc, g) => acc + (g.targetAmount || 0), 0);
   const savingsPercent = totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
 
   const getSaved = (goal) => goal.currentSavings || 0;
 
-  // Chart data with animation
   const data = useMemo(
     () => ({
       labels: ["Saved", "Remaining"],
@@ -69,24 +67,36 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchGoals = async () => {
+      const token = localStorage.getItem("token");
+      const headers = { Authorization: `Bearer ${token}` };
+
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get("/api/goals", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setGoals(res.data);
+        // Fetch goals
+        const activeRes = await axios.get("/api/goals", { headers });
+        const completedRes = await axios.get("/api/goals/achieved", { headers });
+
+        setActiveGoals(activeRes.data);
+        setCompletedGoals(completedRes.data);
+        setAllGoals([...activeRes.data, ...completedRes.data]);
       } catch (err) {
-        console.error("Error loading dashboard goals", err);
+        console.error("Failed to fetch goals:", err);
       } finally {
         setLoading(false);
       }
     };
+
+    // Optionally fetch user info if stored
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+
     fetchGoals();
   }, []);
 
   if (loading) return <p className="text-center">Loading...</p>;
 
-  // Card style with hover effects
+  // Card style
   const cardBaseStyle = {
     boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
     border: "none",
@@ -100,6 +110,11 @@ const Dashboard = () => {
     e.currentTarget.style.boxShadow = isEnter
       ? "0 8px 15px rgba(0,0,0,0.2)"
       : "0 2px 5px rgba(0,0,0,0.1)";
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
   };
 
   return (
@@ -163,13 +178,29 @@ const Dashboard = () => {
           </li>
         </ul>
         <div className="col-md-3 text-end">
-          <button
-            className="btn me-2"
-            onClick={() => navigate("/login")}
-            style={{ background: "#7f56d955" }}
-          >
-            Logout
-          </button>
+          {user ? (
+            <Dropdown align="end">
+              <Dropdown.Toggle style={{ background: "#7f56d9ce" }}>
+                Hi, {user.name}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu style={{ background: "#7f56d955" }}>
+                <Dropdown.Item onClick={() => navigate("/account")}>
+                  Account
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          ) : (
+            <button
+              className="btn me-2"
+              onClick={handleLogout}
+              style={{ background: "#7f56d955" }}
+            >
+              Logout
+            </button>
+          )}
         </div>
       </header>
 
@@ -197,7 +228,7 @@ const Dashboard = () => {
           {/* Overview Cards */}
           <Row className="mb-4 text-center">
             {[
-              { title: "Total Goals", value: goals.length },
+              { title: "Total Goals", value: allGoals.length },
               { title: "Active Goals", value: activeGoals.length },
               { title: "Completed Goals", value: completedGoals.length },
               {
@@ -221,7 +252,6 @@ const Dashboard = () => {
               </Col>
             ))}
           </Row>
-
 
           {/* Donut Chart */}
           <div
@@ -297,7 +327,6 @@ const Dashboard = () => {
                         {`${percentage.toFixed(0)}%`}
                       </div>
                     </ProgressBar>
-
                     <div className="mt-2">
                       ₹{saved.toLocaleString()} / ₹
                       {goal.targetAmount.toLocaleString()}
@@ -312,20 +341,20 @@ const Dashboard = () => {
           <div className="text-center mt-4">
             <Button
               className="me-2"
-              style={{ background: '#7f56d955' }}
+              style={{ background: "#7f56d955" }}
               onClick={() => navigate("/activegoals")}
             >
               View Active Goals
             </Button>
             <Button
-              style={{ background: '#7f56d9ce' }}
+              style={{ background: "#7f56d9ce" }}
               onClick={() => navigate("/pastgoals")}
               className="me-2"
             >
               View Achieved Goals
             </Button>
             <Button
-              style={{ background: 'white', color: 'black' }}
+              style={{ background: "white", color: "black" }}
               onClick={() => navigate("/add-goal")}
             >
               + Create Goal
@@ -334,7 +363,6 @@ const Dashboard = () => {
         </div>
       </main>
 
-      {/* FOOTER */}
       <Footer />
     </div>
   );
