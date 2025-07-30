@@ -105,7 +105,6 @@ const DreamFrame = () => {
               <button className="nav-link px-4 btn btn-link" style={{ color: '#7f56d9ff', fontSize: '17px' }} onClick={() => navigate('/budgetbuddy')}>Chat</button>
             </li>
           </ul>
-
           <div className="col-md-3 text-end">
             {user?.name ? (
               <Dropdown align="end">
@@ -114,7 +113,15 @@ const DreamFrame = () => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu style={{ background: '#7f56d955' }}>
-                  <Dropdown.Item onClick={() => navigate('/account')}>Account</Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      navigate('/add-goal');
+                    }}
+                  >
+                    Add Goal
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={() => navigate('/dashboard')}>Dashboard</Dropdown.Item>
                   <Dropdown.Divider />
                   <Dropdown.Item
                     onClick={() => {

@@ -9,23 +9,23 @@ const PastGoals = () => {
   const navigate = useNavigate();
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
-const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   useEffect(() => {
-  const fetchGoals = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get("/api/goals/achieved", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setGoals(res.data); // Use res.data, not completed
-    } catch (err) {
-      console.error("Error fetching achieved goals", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  fetchGoals();
-}, []);
+    const fetchGoals = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get("/api/goals/achieved", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setGoals(res.data); // Use res.data, not completed
+      } catch (err) {
+        console.error("Error fetching achieved goals", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchGoals();
+  }, []);
 
 
   const cardBaseStyle = {
@@ -113,7 +113,15 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
               </Dropdown.Toggle>
 
               <Dropdown.Menu style={{ background: '#7f56d955' }}>
-                <Dropdown.Item onClick={() => navigate('/account')}>Account</Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    navigate('/add-goal');
+                  }}
+                >
+                  Add Goal
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={() => navigate('/dashboard')}>Dashboard</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={() => {
@@ -128,8 +136,8 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
           ) : (
             <button
               className="btn me-2"
-              onClick={() => navigate("/login")}
-              style={{ background: "#7f56d955" }}
+              onClick={() => navigate('/login')}
+              style={{ background: '#7f56d955' }}
             >
               Logout
             </button>

@@ -178,25 +178,36 @@ const Dashboard = () => {
           </li>
         </ul>
         <div className="col-md-3 text-end">
-          {user ? (
+          {user?.name ? (
             <Dropdown align="end">
-              <Dropdown.Toggle style={{ background: "#7f56d9ce" }}>
+              <Dropdown.Toggle style={{ background: '#7f56d9ce' }}>
                 Hi, {user.name}
               </Dropdown.Toggle>
 
-              <Dropdown.Menu style={{ background: "#7f56d955" }}>
-                <Dropdown.Item onClick={() => navigate("/account")}>
-                  Account
+              <Dropdown.Menu style={{ background: '#7f56d955' }}>
+                <Dropdown.Item
+                  onClick={() => {
+                    navigate('/add-goal');
+                  }}
+                >
+                  Add Goal
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate('/login');
+                  }}
+                >
+                  Logout
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           ) : (
             <button
               className="btn me-2"
-              onClick={handleLogout}
-              style={{ background: "#7f56d955" }}
+              onClick={() => navigate('/login')}
+              style={{ background: '#7f56d955' }}
             >
               Logout
             </button>

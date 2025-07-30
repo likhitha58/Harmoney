@@ -119,19 +119,25 @@ const BudgetBuddy = () => {
         <div className="col-md-3 text-end">
           {user?.name ? (
             <Dropdown align="end">
-              <Dropdown.Toggle style={{ background: "#7f56d9ce" }}>
+              <Dropdown.Toggle style={{ background: '#7f56d9ce' }}>
                 Hi, {user.name}
               </Dropdown.Toggle>
 
-              <Dropdown.Menu style={{ background: "#7f56d955" }}>
-                <Dropdown.Item onClick={() => navigate("/account")}>
-                  Account
+              <Dropdown.Menu style={{ background: '#7f56d955' }}>
+                <Dropdown.Item
+                  onClick={() => {
+                    navigate('/add-goal');
+                  }}
+                >
+                  Add Goal
                 </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={() => navigate('/dashboard')}>Dashboard</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={() => {
                     localStorage.clear();
-                    navigate("/login");
+                    navigate('/login');
                   }}
                 >
                   Logout
@@ -141,8 +147,8 @@ const BudgetBuddy = () => {
           ) : (
             <button
               className="btn me-2"
-              onClick={() => navigate("/login")}
-              style={{ background: "#7f56d955" }}
+              onClick={() => navigate('/login')}
+              style={{ background: '#7f56d955' }}
             >
               Logout
             </button>

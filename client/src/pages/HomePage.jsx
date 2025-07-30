@@ -68,7 +68,15 @@ const HomePage = () => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu style={{ background: '#7f56d955' }}>
-                  <Dropdown.Item onClick={() => navigate('/account')}>Account</Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      navigate('/add-goal');
+                    }}
+                  >
+                    Add Goal
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={() => navigate('/dashboard')}>Dashboard</Dropdown.Item>
                   <Dropdown.Divider />
                   <Dropdown.Item
                     onClick={() => {
