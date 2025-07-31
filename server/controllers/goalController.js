@@ -1,6 +1,12 @@
 import Goal from "../models/goalModel.js";
+import User from "../models/userModel.js";
 import { getSavingsPlanFromAI } from "../services/aiService.js";
 import { sendEmail } from "../utils/emailService.js";
+import {
+  goalCreatedTemplate,
+  goalUpdatedTemplate,
+  goalCompletedTemplate,
+} from "../utils/emailTemplates.js";
 
 // CREATE GOAL
 export const createGoal = async (req, res) => {
@@ -43,19 +49,17 @@ export const createGoal = async (req, res) => {
 
     await goal.save();
 
+    // Fetch user's name & email
+    const user = await User.findById(req.user.id).select("name email");
+    const userName = user?.name || "User";
+
     // Email Notification - Goal Creation
-    const userEmail = req.user.email;
-    console.log("Sending email to:", req.user.email);
     await sendEmail(
-      userEmail,
+      user.email,
       "Your new goal has been created!",
-      `
-        <h2>Goal Created Successfully</h2>
-        <p><strong>Goal:</strong> ${goal.title}</p>
-        <p>Target Amount: ₹${goal.targetAmount}</p>
-        <p>Good luck achieving your goal!</p>
-      `
+      goalCreatedTemplate(goal, userName)
     );
+
 
     res.status(201).json(goal);
   } catch (err) {
@@ -119,6 +123,10 @@ export const updateGoal = async (req, res) => {
 
     const updatedGoal = await goal.save();
 
+    // Fetch user's name & email
+    const user = await User.findById(req.user.id).select("name email");
+    const userName = user?.name || "User";
+
     // Prepare email details
     const newAmount = updatedGoal.currentSavings;
     const amountLeft = Math.max(updatedGoal.targetAmount - newAmount, 0);
@@ -127,33 +135,22 @@ export const updateGoal = async (req, res) => {
       0
     );
 
-    const userEmail = req.user.email;
-
     if (updatedGoal.completed) {
-      // Email Notification - Goal Completion
+      // Goal Completion Email
       await sendEmail(
-        userEmail,
+        user.email,
         "Congratulations! Goal Achieved 🎉",
-        `
-          <h2>Congratulations!</h2>
-          <p>You have successfully achieved your goal: <strong>${updatedGoal.title}</strong>.</p>
-          <p>Target Amount: ₹${updatedGoal.targetAmount}</p>
-          <p>Well done on reaching your goal!</p>
-        `
+        goalCompletedTemplate(updatedGoal, userName)
       );
+
     } else {
-      // Email Notification - Goal Updated
+      // Goal Updated Email
       await sendEmail(
-        userEmail,
+        user.email,
         "Goal Updated",
-        `
-          <h2>Your Goal Has Been Updated</h2>
-          <p><strong>Goal:</strong> ${updatedGoal.title}</p>
-          <p>Amount Updated: ₹${oldAmount} → ₹${newAmount}</p>
-          <p>Amount Left: ₹${amountLeft}</p>
-          <p>Estimated Months Left: ${monthsLeft}</p>
-        `
+        goalUpdatedTemplate(updatedGoal, oldAmount, userName)
       );
+
     }
 
     res.json(updatedGoal);
