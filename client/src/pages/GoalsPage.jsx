@@ -36,23 +36,22 @@ const GoalsPage = () => {
     <>
       {/* NAVBAR */}
       <div className="container">
-        <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-white">
           <div className="col-md-3 mb-2 mb-md-0">
             <button
               className="btn btn-link p-0"
-              onClick={() => navigate('/')}
-              style={{ textDecoration: 'none' }}
+              onClick={() => navigate("/")}
+              style={{ textDecoration: "none" }}
             >
               <img src={Harmoneylogo} alt="Harmoney Logo" width="60" height="60" />
             </button>
           </div>
-
           <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <li>
               <button
                 className="nav-link px-4 btn btn-link"
-                style={{ color: '#7f56d9ff', fontSize: '17px' }}
-                onClick={() => navigate('/home')}
+                style={{ color: "#7f56d9ff", fontSize: "16px" }}
+                onClick={() => navigate("/home")}
               >
                 Home
               </button>
@@ -60,8 +59,8 @@ const GoalsPage = () => {
             <li>
               <button
                 className="nav-link px-4 btn btn-link"
-                style={{ color: '#7f56d9ff', fontSize: '17px' }}
-                onClick={() => navigate('/activegoals')}
+                style={{ color: "#7f56d9ff", fontSize: "16px" }}
+                onClick={() => navigate("/activegoals")}
               >
                 Active goals
               </button>
@@ -69,23 +68,13 @@ const GoalsPage = () => {
             <li>
               <button
                 className="nav-link px-4 btn btn-link"
-                style={{ color: '#7f56d9ff', fontSize: '17px' }}
-                onClick={() => navigate('/pastgoals')}
+                style={{ color: "#7f56d9ff", fontSize: "16px" }}
+                onClick={() => navigate("/pastgoals")}
               >
                 Achieved goals
               </button>
             </li>
-            <li>
-              <button
-                className="nav-link px-4 btn btn-link"
-                style={{ color: '#7f56d9ff', fontSize: '17px' }}
-                onClick={() => navigate('/budgetbuddy')}
-              >
-                Chat
-              </button>
-            </li>
           </ul>
-
           <div className="col-md-3 text-end">
             {user?.name ? (
               <Dropdown align="end">
@@ -100,6 +89,24 @@ const GoalsPage = () => {
                     }}
                   >
                     Add Goal
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item
+                    onClick={() => {
+                      localStorage.clear();
+                      navigate('/budgetbuddy');
+                    }}
+                  >
+                    BudgetBuddy
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item
+                    onClick={() => {
+                      localStorage.clear();
+                      navigate('/dreamframe');
+                    }}
+                  >
+                    DreamFrame
                   </Dropdown.Item>
                   <Dropdown.Divider />
                   <Dropdown.Item onClick={() => navigate('/dashboard')}>Dashboard</Dropdown.Item>

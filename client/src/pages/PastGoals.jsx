@@ -63,7 +63,7 @@ const PastGoals = () => {
           <li>
             <button
               className="nav-link px-4 btn btn-link"
-              style={{ color: "#7F56D9", fontSize: "17px" }}
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
               onClick={() => navigate("/home")}
             >
               Home
@@ -72,7 +72,7 @@ const PastGoals = () => {
           <li>
             <button
               className="nav-link px-4 btn btn-link"
-              style={{ color: "#7F56D9", fontSize: "17px" }}
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
               onClick={() => navigate("/activegoals")}
             >
               Active goals
@@ -81,28 +81,10 @@ const PastGoals = () => {
           <li>
             <button
               className="nav-link px-4 btn btn-link"
-              style={{ color: "#7F56D9", fontSize: "17px" }}
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
               onClick={() => navigate("/pastgoals")}
             >
               Achieved goals
-            </button>
-          </li>
-          <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
-              onClick={() => navigate("/budgetbuddy")}
-            >
-              Chat
-            </button>
-          </li>
-          <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
-              onClick={() => navigate("/dreamframe")}
-            >
-              Dream Frame
             </button>
           </li>
         </ul>
@@ -120,6 +102,24 @@ const PastGoals = () => {
                   }}
                 >
                   Add Goal
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate('/budgetbuddy');
+                  }}
+                >
+                  BudgetBuddy
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate('/dreamframe');
+                  }}
+                >
+                  DreamFrame
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item onClick={() => navigate('/dashboard')}>Dashboard</Dropdown.Item>

@@ -91,7 +91,7 @@ const Dashboard = () => {
         console.log("Goals updated successfully!", "success");
       } catch (err) {
         console.error("Failed to fetch goals:", err);
-        toast.error("Failed to fetch goals", "error");
+        console.log("Failed to fetch goals", "error");
       } finally {
         setLoading(false);
       }
@@ -146,7 +146,7 @@ const Dashboard = () => {
           <li>
             <button
               className="nav-link px-4 btn btn-link"
-              style={{ color: "#7F56D9", fontSize: "17px" }}
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
               onClick={() => navigate("/home")}
             >
               Home
@@ -155,7 +155,7 @@ const Dashboard = () => {
           <li>
             <button
               className="nav-link px-4 btn btn-link"
-              style={{ color: "#7F56D9", fontSize: "17px" }}
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
               onClick={() => navigate("/activegoals")}
             >
               Active goals
@@ -164,50 +164,64 @@ const Dashboard = () => {
           <li>
             <button
               className="nav-link px-4 btn btn-link"
-              style={{ color: "#7F56D9", fontSize: "17px" }}
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
               onClick={() => navigate("/pastgoals")}
             >
               Achieved goals
-            </button>
-          </li>
-          <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7F56D9", fontSize: "17px" }}
-              onClick={() => navigate("/budgetbuddy")}
-            >
-              Chat
-            </button>
-          </li>
-          <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7F56D9", fontSize: "17px" }}
-              onClick={() => navigate("/dreamframe")}
-            >
-              Dream Frame
             </button>
           </li>
         </ul>
         <div className="col-md-3 text-end">
           {user?.name ? (
             <Dropdown align="end">
-              <Dropdown.Toggle style={{ background: "#7f56d9ce" }}>
+              <Dropdown.Toggle style={{ background: '#7f56d9ce' }}>
                 Hi, {user.name}
               </Dropdown.Toggle>
-              <Dropdown.Menu style={{ background: "#7f56d955" }}>
-                <Dropdown.Item onClick={() => navigate("/add-goal")}>
+
+              <Dropdown.Menu style={{ background: '#7f56d955' }}>
+                <Dropdown.Item
+                  onClick={() => {
+                    navigate('/add-goal');
+                  }}
+                >
                   Add Goal
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate('/budgetbuddy');
+                  }}
+                >
+                  BudgetBuddy
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate('/dreamframe');
+                  }}
+                >
+                  DreamFrame
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={() => navigate('/dashboard')}>Dashboard</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate('/login');
+                  }}
+                >
+                  Logout
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           ) : (
             <button
               className="btn me-2"
-              onClick={handleLogout}
-              style={{ background: "#7f56d955" }}
+              onClick={() => navigate('/login')}
+              style={{ background: '#7f56d955' }}
             >
               Logout
             </button>
@@ -321,9 +335,29 @@ const Dashboard = () => {
                       now={percentage}
                       label={`${percentage.toFixed(0)}%`}
                       style={{
-                        background: "#e0d7ff",
+                        backgroundColor: "#e0d7ff", // unfilled track color
+                        height: "20px",
+                        borderRadius: "8px",
+                        overflow: "hidden"
                       }}
-                    />
+                    >
+                      <div
+                        style={{
+                          width: `${percentage}%`,
+                          backgroundColor: "#7F56D9", // dark purple filled section
+                          height: "100%",
+                          textAlign: "center",
+                          color: "white",
+                          fontWeight: "bold",
+                          borderRadius: "8px 0 0 8px",
+                          transition: "width 0.6s ease"
+                        }}
+                      >
+                        {`${percentage.toFixed(0)}%`}
+                      </div>
+                    </ProgressBar>
+
+
                     <div className="mt-2">
                       ₹{saved.toLocaleString()} / ₹
                       {goal.targetAmount.toLocaleString()}
@@ -362,7 +396,7 @@ const Dashboard = () => {
 
       <Footer />
 
-      </div>
+    </div>
   );
 };
 

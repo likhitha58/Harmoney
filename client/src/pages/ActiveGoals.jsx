@@ -88,24 +88,6 @@ const ActiveGoals = () => {
               Achieved goals
             </button>
           </li>
-          <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "16px" }}
-              onClick={() => navigate("/budgetbuddy")}
-            >
-              Chat
-            </button>
-          </li>
-          <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "16px" }}
-              onClick={() => navigate("/dreamframe")}
-            >
-              Dream Frame
-            </button>
-          </li>
         </ul>
         <div className="col-md-3 text-end">
           {user?.name ? (
@@ -121,6 +103,24 @@ const ActiveGoals = () => {
                   }}
                 >
                   Add Goal
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate('/budgetbuddy');
+                  }}
+                >
+                  BudgetBuddy
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate('/dreamframe');
+                  }}
+                >
+                  DreamFrame
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item onClick={() => navigate('/dashboard')}>Dashboard</Dropdown.Item>

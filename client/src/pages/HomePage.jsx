@@ -58,6 +58,15 @@ const HomePage = () => {
                 Chat
               </button>
             </li>
+            <li>
+              <button
+                className="nav-link px-4 btn btn-link"
+                style={{ color: '#7f56d9ff', fontSize: '17px' }}
+                onClick={() => navigate('/dreamframe')}
+              >
+                DreamFrame
+              </button>
+            </li>
           </ul>
           <div className="col-md-3 text-end">
             {user?.name ? (

@@ -120,28 +120,30 @@ const ActiveGoalDetails = () => {
         </div>
         <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
           <li>
-            <button className="nav-link px-4 btn btn-link" style={{ color: "#7f56d9ff", fontSize: "17px" }} onClick={() => navigate("/home")}>
+            <button
+              className="nav-link px-4 btn btn-link"
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
+              onClick={() => navigate("/home")}
+            >
               Home
             </button>
           </li>
           <li>
-            <button className="nav-link px-4 btn btn-link" style={{ color: "#7f56d9ff", fontSize: "17px" }} onClick={() => navigate("/activegoals")}>
+            <button
+              className="nav-link px-4 btn btn-link"
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
+              onClick={() => navigate("/activegoals")}
+            >
               Active goals
             </button>
           </li>
           <li>
-            <button className="nav-link px-4 btn btn-link" style={{ color: "#7f56d9ff", fontSize: "17px" }} onClick={() => navigate("/pastgoals")}>
+            <button
+              className="nav-link px-4 btn btn-link"
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
+              onClick={() => navigate("/pastgoals")}
+            >
               Achieved goals
-            </button>
-          </li>
-          <li>
-            <button className="nav-link px-4 btn btn-link" style={{ color: "#7f56d9ff", fontSize: "17px" }} onClick={() => navigate("/budgetbuddy")}>
-              Chat
-            </button>
-          </li>
-          <li>
-            <button className="nav-link px-4 btn btn-link" style={{ color: "#7f56d9ff", fontSize: "17px" }} onClick={() => navigate("/dreamframe")}>
-              Dream Frame
             </button>
           </li>
         </ul>
@@ -151,14 +153,35 @@ const ActiveGoalDetails = () => {
               <Dropdown.Toggle style={{ background: '#7f56d9ce' }}>
                 Hi, {user.name}
               </Dropdown.Toggle>
+
               <Dropdown.Menu style={{ background: '#7f56d955' }}>
-                <Dropdown.Item onClick={() => navigate('/add-goal')}>
+                <Dropdown.Item
+                  onClick={() => {
+                    navigate('/add-goal');
+                  }}
+                >
                   Add Goal
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={() => navigate('/dashboard')}>
-                  Dashboard
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate('/budgetbuddy');
+                  }}
+                >
+                  BudgetBuddy
                 </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate('/dreamframe');
+                  }}
+                >
+                  DreamFrame
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={() => navigate('/dashboard')}>Dashboard</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={() => {
