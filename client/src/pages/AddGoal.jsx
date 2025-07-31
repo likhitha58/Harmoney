@@ -5,12 +5,13 @@ import axios from "axios";
 import Footer from "../components/Footer";
 import '../styles/addGoal.css';
 import Harmoneylogo from "../assets/logo.png";
+import { toast } from "react-toastify";
+
 
 const AddGoal = () => {
   const navigate = useNavigate();
   const [showSideIncome, setShowSideIncome] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -55,14 +56,14 @@ const AddGoal = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setPlan(res.data);
+      toast.success("Plan generated successfully!", "success");
     } catch (err) {
       console.error("Error generating plan", err);
+      toast.error("Failed to generate plan. Please try again.", "error");
     } finally {
       setLoading(false);
     }
   };
-
-
   return (
     <div className="container">
       {/* HEADER */}

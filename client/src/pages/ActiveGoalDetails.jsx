@@ -6,6 +6,8 @@ import Footer from "../components/Footer";
 import Harmoneylogo from "../assets/logo.png";
 import "../styles/activeGoals.css";
 import confetti from "canvas-confetti";
+import { toast } from "react-toastify";
+
 
 const ActiveGoalDetails = () => {
   const { id } = useParams();
@@ -27,9 +29,9 @@ const ActiveGoalDetails = () => {
         });
         const selected = res.data.find((g) => g._id === id);
         setGoal(selected);
-
       } catch (err) {
         console.error("Error fetching goal details", err);
+        toast.error("Failed to fetch goal details", "error");
       } finally {
         setLoading(false);
       }
@@ -55,8 +57,6 @@ const ActiveGoalDetails = () => {
 
       if (updatedGoal.completed) {
         setShowEditModal(false);
-
-        // Set message to show in UI
         setCelebrationMessage(
           `🎉 Congratulations! You have successfully achieved your goal of "${updatedGoal.title}" 🎉`
         );
@@ -68,20 +68,24 @@ const ActiveGoalDetails = () => {
           origin: { y: 0.6 },
         });
 
-        // After 2 seconds, navigate to achieved goals page
+        // Show toast
+        toast.success(`Goal "${updatedGoal.title}" completed!`, "success");
+
+        // Redirect after 2 seconds
         setTimeout(() => {
-          setCelebrationMessage(""); // clear message
+          setCelebrationMessage("");
           navigate("/pastgoals");
         }, 2000);
       } else {
         setShowEditModal(false);
+        toast.success("Goal updated successfully", "success");
         navigate("/dashboard");
       }
     } catch (err) {
       console.error("Error updating goal", err);
+      toast.error("Failed to update goal. Please try again.", "error");
     }
   };
-
 
   const handleDeleteGoal = async () => {
     if (!window.confirm("Are you sure you want to delete this goal? This action cannot be undone.")) {
@@ -92,15 +96,14 @@ const ActiveGoalDetails = () => {
       await axios.delete(`/api/goals/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert("Goal deleted successfully!");
       setShowEditModal(false);
+      toast.info("Goal deleted successfully!", "success");
       navigate("/dashboard");
     } catch (err) {
       console.error("Error deleting goal", err);
-      alert("Failed to delete the goal. Please try again.");
+      toast.error("Failed to delete goal. Please try again.", "error");
     }
   };
-
 
   return (
     <div className="container">
@@ -117,47 +120,27 @@ const ActiveGoalDetails = () => {
         </div>
         <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
           <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
-              onClick={() => navigate("/home")}
-            >
+            <button className="nav-link px-4 btn btn-link" style={{ color: "#7f56d9ff", fontSize: "17px" }} onClick={() => navigate("/home")}>
               Home
             </button>
           </li>
           <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
-              onClick={() => navigate("/activegoals")}
-            >
+            <button className="nav-link px-4 btn btn-link" style={{ color: "#7f56d9ff", fontSize: "17px" }} onClick={() => navigate("/activegoals")}>
               Active goals
             </button>
           </li>
           <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
-              onClick={() => navigate("/pastgoals")}
-            >
+            <button className="nav-link px-4 btn btn-link" style={{ color: "#7f56d9ff", fontSize: "17px" }} onClick={() => navigate("/pastgoals")}>
               Achieved goals
             </button>
           </li>
           <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
-              onClick={() => navigate("/budgetbuddy")}
-            >
+            <button className="nav-link px-4 btn btn-link" style={{ color: "#7f56d9ff", fontSize: "17px" }} onClick={() => navigate("/budgetbuddy")}>
               Chat
             </button>
           </li>
           <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
-              onClick={() => navigate("/dreamframe")}
-            >
+            <button className="nav-link px-4 btn btn-link" style={{ color: "#7f56d9ff", fontSize: "17px" }} onClick={() => navigate("/dreamframe")}>
               Dream Frame
             </button>
           </li>
@@ -168,17 +151,14 @@ const ActiveGoalDetails = () => {
               <Dropdown.Toggle style={{ background: '#7f56d9ce' }}>
                 Hi, {user.name}
               </Dropdown.Toggle>
-
               <Dropdown.Menu style={{ background: '#7f56d955' }}>
-                <Dropdown.Item
-                  onClick={() => {
-                    navigate('/add-goal');
-                  }}
-                >
+                <Dropdown.Item onClick={() => navigate('/add-goal')}>
                   Add Goal
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={() => navigate('/dashboard')}>Dashboard</Dropdown.Item>
+                <Dropdown.Item onClick={() => navigate('/dashboard')}>
+                  Dashboard
+                </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={() => {
@@ -203,10 +183,7 @@ const ActiveGoalDetails = () => {
       </header>
 
       {/* CONTENT */}
-      <main
-        className="goal-container container"
-        style={{ backgroundColor: "rgb(243, 240, 255)" }}
-      >
+      <main className="goal-container container" style={{ backgroundColor: "rgb(243, 240, 255)" }}>
         <div className="glass-panel p-4">
           {loading ? (
             <p className="text-center">Loading...</p>
@@ -239,7 +216,6 @@ const ActiveGoalDetails = () => {
                 <strong>Current Savings:</strong> ₹{goal.currentSavings || 0}
               </p>
 
-              {/* Edit Button */}
               <div className="text-center mb-4">
                 <Button
                   style={{ backgroundColor: "#7F56D9", borderColor: "#7F56D9" }}
@@ -249,10 +225,9 @@ const ActiveGoalDetails = () => {
                 </Button>
               </div>
 
-              {/* Savings Plan Table */}
               {goal.savingsPlan && (
-                <div className="table-responsive mt-4" >
-                  <table className="table table-bordered text-center" >
+                <div className="table-responsive mt-4">
+                  <table className="table table-bordered text-center">
                     <thead>
                       <tr>
                         <th>Month</th>
@@ -271,7 +246,6 @@ const ActiveGoalDetails = () => {
                           </tr>
                         );
                       })}
-
                     </tbody>
                   </table>
                 </div>
@@ -279,18 +253,18 @@ const ActiveGoalDetails = () => {
             </>
           )}
         </div>
+
         {celebrationMessage && (
           <div className="text-center p-4 my-4" style={{ background: "#e6e1fc", borderRadius: "12px" }}>
             <h3 style={{ color: "#7F56D9" }}>{celebrationMessage}</h3>
           </div>
         )}
-
       </main>
 
-      {/* Modal for Editing */}
+      {/* Modal */}
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)} centered>
         <Modal.Header closeButton style={{ background: '#7f56d9ce' }}>
-          <Modal.Title >Edit Goal</Modal.Title>
+          <Modal.Title>Edit Goal</Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleUpdateGoal} style={{ background: '#7f56d955' }}>
           <Modal.Body>
@@ -310,9 +284,7 @@ const ActiveGoalDetails = () => {
                     as="textarea"
                     rows={3}
                     value={goal.description}
-                    onChange={(e) =>
-                      setGoal({ ...goal, description: e.target.value })
-                    }
+                    onChange={(e) => setGoal({ ...goal, description: e.target.value })}
                   />
                 </Form.Group>
                 <Form.Group className="mb-3">
@@ -320,35 +292,23 @@ const ActiveGoalDetails = () => {
                   <Form.Control
                     type="number"
                     value={goal.currentSavings || 0}
-                    onChange={(e) =>
-                      setGoal({
-                        ...goal,
-                        currentSavings: Number(e.target.value),
-                      })
-                    }
+                    onChange={(e) => setGoal({ ...goal, currentSavings: Number(e.target.value) })}
                   />
                 </Form.Group>
               </>
             )}
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              style={{ background: "#7f56d955" }}
-              onClick={() => setShowEditModal(false)}
-            >
+            <Button style={{ background: "#7f56d955" }} onClick={() => setShowEditModal(false)}>
               Cancel
             </Button>
             <Button type="submit" style={{ background: "#7f56d9ce" }}>
               Save Changes
             </Button>
-            <Button
-              onClick={handleDeleteGoal}
-              style={{ background: "black", border: "none" }}
-            >
+            <Button onClick={handleDeleteGoal} style={{ background: "black", border: "none" }}>
               Delete Goal
             </Button>
           </Modal.Footer>
-
         </Form>
       </Modal>
 

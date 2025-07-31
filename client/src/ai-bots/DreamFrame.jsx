@@ -11,6 +11,7 @@ import retireImg from '../assets/retire.png';
 import budgetImg from '../assets/budget.png';
 import businessImg from '../assets/business.png';
 import dreamframe from '../assets/FRAME.png';
+import { toast } from "react-toastify";
 import '../styles/dreamFrame.css';
 
 const DreamFrame = () => {
@@ -19,6 +20,7 @@ const DreamFrame = () => {
   const [loading, setLoading] = useState(false);
   const [activeGoals, setActiveGoals] = useState([]);
   const [selectedGoal, setSelectedGoal] = useState("");
+
   const sampleImages = [
     homeImg,
     gradImg,
@@ -27,6 +29,7 @@ const DreamFrame = () => {
     budgetImg,
     businessImg,
   ];
+
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -40,7 +43,7 @@ const DreamFrame = () => {
         console.log("Active goals fetched:", res.data);
         setActiveGoals(res.data || []);
       } catch (err) {
-        console.error("Failed to load goals", err);
+        toast.error("Failed to load goals", err);
       }
     };
     fetchGoals();
@@ -48,18 +51,20 @@ const DreamFrame = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!prompt.trim()) return;
+    if (!prompt.trim()) {
+      toast.warning("Please enter a dream prompt", "warning");
+      return;
+    }
+
+    if (!selectedGoal) {
+      toast.warning("Please select a goal", "warning");
+      return;
+    }
 
     try {
       setLoading(true);
       setGeneratedImage(null);
       const token = localStorage.getItem("token");
-
-      if (!selectedGoal) {
-        alert("Please select a goal");
-        setLoading(false);
-        return;
-      }
 
       const res = await axios.post(
         "/api/dreamframe/generate",
@@ -68,9 +73,10 @@ const DreamFrame = () => {
       );
 
       setGeneratedImage(res.data.imageUrl);
+      toast.success("Dream image generated successfully!", "success");
     } catch (error) {
       console.error("Error generating image", error);
-      alert("Failed to generate dream image. Please try again.");
+      toast.error("Failed to generate dream image. Please try again.", "error");
     } finally {
       setLoading(false);
     }

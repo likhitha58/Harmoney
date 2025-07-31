@@ -1,0 +1,41 @@
+/* Toastify container overrides */
+.Toastify__toast {
+  border-radius: 12px;
+  padding: 10px 14px;
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  color: #222;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Title and body adjustments */
+.Toastify__toast-body {
+  font-size: 0.95rem;
+}
+
+/* Close button adjustments */
+.Toastify__close-button {
+  opacity: 0.5;
+}
+.Toastify__close-button:hover {
+  opacity: 0.8;
+}
+
+/* Custom color accents */
+.Toastify__toast--success {
+  background: rgba(40, 167, 69, 0.15);
+  border-left: 5px solid #28a745;
+}
+.Toastify__toast--error {
+  background: rgba(220, 53, 69, 0.15);
+  border-left: 5px solid #dc3545;
+}
+.Toastify__toast--info {
+  background: rgba(13, 202, 240, 0.15);
+  border-left: 5px solid #0dcaf0;
+}
+.Toastify__toast--warning {
+  background: rgba(255, 193, 7, 0.18);
+  border-left: 5px solid #ffc107;
+}

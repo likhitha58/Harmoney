@@ -4,6 +4,7 @@ import { Dropdown } from 'react-bootstrap';
 import Footer from "../components/Footer";
 import Harmoneylogo from '../assets/logo.png';
 import '../styles/GoalsPage.css';
+import { toast } from "react-toastify";
 
 const GoalsPage = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const GoalsPage = () => {
 
   const handleAddGoal = (e) => {
     e.preventDefault();
-    console.log('New Goal Added:', newGoal);
+    toast.info('New Goal Added:', newGoal);
     setNewGoal({ title: '', description: '', targetDate: '', amount: '' });
   };
 

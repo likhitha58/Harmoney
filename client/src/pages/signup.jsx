@@ -3,6 +3,7 @@ import '../styles/signup.css';
 import loginSideImage from '../assets/loginSideImage.png';
 import logo from '../assets/Harmoney.png';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -24,17 +25,17 @@ const Signup = () => {
 
       if (!res.ok) {
         const errorText = await res.text();
-        console.error('Server error:', errorText);
+        toast.error('Server error:', errorText);
         return;
       }
 
       const data = await res.json();
-      console.log('Signup success:', data);
+      toast.success('Signup success:', data);
 
       // On success navigate to SecurityQuestions
       navigate('/SecurityQuestions', { state: { email: data.email } });
     } catch (error) {
-      console.error('Error during signup:', error);
+      toast.error('Error during signup:', error);
     }
   };
 

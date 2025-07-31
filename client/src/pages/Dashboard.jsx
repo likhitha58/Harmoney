@@ -5,6 +5,8 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import Harmoneylogo from "../assets/logo.png";
 import { Row, Col, Card, Button, ProgressBar, Dropdown } from "react-bootstrap";
+import { toast } from "react-toastify";
+
 import {
   Chart as ChartJS,
   ArcElement,
@@ -26,10 +28,17 @@ const Dashboard = () => {
   const [allGoals, setAllGoals] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Compute totals
-  const totalSaved = allGoals.reduce((acc, g) => acc + (g.currentSavings || 0), 0);
-  const totalTarget = allGoals.reduce((acc, g) => acc + (g.targetAmount || 0), 0);
-  const savingsPercent = totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
+  // Totals
+  const totalSaved = allGoals.reduce(
+    (acc, g) => acc + (g.currentSavings || 0),
+    0
+  );
+  const totalTarget = allGoals.reduce(
+    (acc, g) => acc + (g.targetAmount || 0),
+    0
+  );
+  const savingsPercent =
+    totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
 
   const getSaved = (goal) => goal.currentSavings || 0;
 
@@ -65,27 +74,30 @@ const Dashboard = () => {
     []
   );
 
+  // Fetch goals
   useEffect(() => {
     const fetchGoals = async () => {
       const token = localStorage.getItem("token");
       const headers = { Authorization: `Bearer ${token}` };
 
       try {
-        // Fetch goals
         const activeRes = await axios.get("/api/goals", { headers });
         const completedRes = await axios.get("/api/goals/achieved", { headers });
 
         setActiveGoals(activeRes.data);
         setCompletedGoals(completedRes.data);
         setAllGoals([...activeRes.data, ...completedRes.data]);
+
+        console.log("Goals updated successfully!", "success");
       } catch (err) {
         console.error("Failed to fetch goals:", err);
+        toast.error("Failed to fetch goals", "error");
       } finally {
         setLoading(false);
       }
     };
 
-    // Optionally fetch user info if stored
+    // Fetch user from localStorage
     const userData = localStorage.getItem("user");
     if (userData) {
       setUser(JSON.parse(userData));
@@ -118,7 +130,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container" style={{ position: "relative" }}>
       {/* NAVBAR */}
       <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-white">
         <div className="col-md-3 mb-2 mb-md-0">
@@ -180,34 +192,22 @@ const Dashboard = () => {
         <div className="col-md-3 text-end">
           {user?.name ? (
             <Dropdown align="end">
-              <Dropdown.Toggle style={{ background: '#7f56d9ce' }}>
+              <Dropdown.Toggle style={{ background: "#7f56d9ce" }}>
                 Hi, {user.name}
               </Dropdown.Toggle>
-
-              <Dropdown.Menu style={{ background: '#7f56d955' }}>
-                <Dropdown.Item
-                  onClick={() => {
-                    navigate('/add-goal');
-                  }}
-                >
+              <Dropdown.Menu style={{ background: "#7f56d955" }}>
+                <Dropdown.Item onClick={() => navigate("/add-goal")}>
                   Add Goal
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item
-                  onClick={() => {
-                    localStorage.clear();
-                    navigate('/login');
-                  }}
-                >
-                  Logout
-                </Dropdown.Item>
+                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           ) : (
             <button
               className="btn me-2"
-              onClick={() => navigate('/login')}
-              style={{ background: '#7f56d955' }}
+              onClick={handleLogout}
+              style={{ background: "#7f56d955" }}
             >
               Logout
             </button>
@@ -321,23 +321,9 @@ const Dashboard = () => {
                       now={percentage}
                       label={`${percentage.toFixed(0)}%`}
                       style={{
-                        background: "#e0d7ff", // light background for track
+                        background: "#e0d7ff",
                       }}
-                    >
-                      <div
-                        style={{
-                          width: `${percentage}%`,
-                          backgroundColor: "#7f56d9ce",
-                          height: "100%",
-                          borderRadius: "0.25rem",
-                          textAlign: "center",
-                          color: "#fff",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {`${percentage.toFixed(0)}%`}
-                      </div>
-                    </ProgressBar>
+                    />
                     <div className="mt-2">
                       ₹{saved.toLocaleString()} / ₹
                       {goal.targetAmount.toLocaleString()}
@@ -375,7 +361,8 @@ const Dashboard = () => {
       </main>
 
       <Footer />
-    </div>
+
+      </div>
   );
 };
 

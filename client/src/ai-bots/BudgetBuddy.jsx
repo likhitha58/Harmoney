@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Container, Card, Button, FormControl, InputGroup, Dropdown } from "react-bootstrap";
+import { toast } from "react-toastify";  // <-- ADD
 import Harmoneylogo from "../assets/logo.png";
 import budgetbuddy from "../assets/bb.png";
 import "../styles/budgetBuddy.css";
@@ -16,7 +17,6 @@ const BudgetBuddy = () => {
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
 
-  // Get user info from localStorage
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
@@ -26,7 +26,12 @@ const BudgetBuddy = () => {
   }, [messages]);
 
   const handleSend = async () => {
-    if (!userInput.trim()) return;
+    if (!userInput.trim()) {
+      toast.warning("Please enter a question before sending.", {
+        className: "custom-toast warning",
+      });
+      return;
+    }
 
     const newMessages = [...messages, { sender: "user", text: userInput }];
     setMessages(newMessages);
@@ -45,12 +50,20 @@ const BudgetBuddy = () => {
         ...newMessages,
         { sender: "bot", text: res.data.answer }
       ]);
+
+      toast.success("Response received!", {
+        className: "custom-toast success",
+      });
     } catch (err) {
       console.error("Error with chatbot", err);
       setMessages([
         ...newMessages,
         { sender: "bot", text: "Sorry, I couldn’t respond. Please try again later." }
       ]);
+
+      toast.error("Failed to fetch response. Please try again.", {
+        className: "custom-toast error",
+      });
     } finally {
       setLoading(false);
     }
@@ -59,102 +72,71 @@ const BudgetBuddy = () => {
   return (
     <div className="container">
       {/* NAVBAR */}
-      <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-white">
-        <div className="col-md-3 mb-2 mb-md-0">
-          <button
-            className="btn btn-link p-0"
-            onClick={() => navigate("/")}
-            style={{ textDecoration: "none" }}
-          >
-            <img src={Harmoneylogo} alt="Harmoney Logo" width="60" height="60" />
-          </button>
-        </div>
-        <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-          <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
-              onClick={() => navigate("/home")}
-            >
-              Home
-            </button>
-          </li>
-          <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
-              onClick={() => navigate("/activegoals")}
-            >
-              Active goals
-            </button>
-          </li>
-          <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
-              onClick={() => navigate("/pastgoals")}
-            >
-              Achieved goals
-            </button>
-          </li>
-          <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
-              onClick={() => navigate("/budgetbuddy")}
-            >
-              Chat
-            </button>
-          </li>
-          <li>
-            <button
-              className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
-              onClick={() => navigate("/dreamframe")}
-            >
-              Dream Frame
-            </button>
-          </li>
-        </ul>
-        <div className="col-md-3 text-end">
-          {user?.name ? (
-            <Dropdown align="end">
-              <Dropdown.Toggle style={{ background: '#7f56d9ce' }}>
-                Hi, {user.name}
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu style={{ background: '#7f56d955' }}>
-                <Dropdown.Item
-                  onClick={() => {
-                    navigate('/add-goal');
-                  }}
-                >
-                  Add Goal
-                </Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item onClick={() => navigate('/dashboard')}>Dashboard</Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item
-                  onClick={() => {
-                    localStorage.clear();
-                    navigate('/login');
-                  }}
-                >
-                  Logout
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          ) : (
-            <button
-              className="btn me-2"
-              onClick={() => navigate('/login')}
-              style={{ background: '#7f56d955' }}
-            >
-              Logout
-            </button>
-          )}
-        </div>
-      </header>
+      <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+                <div className="col-md-3 mb-2 mb-md-0">
+                  <button
+                    className="btn btn-link p-0"
+                    onClick={() => navigate('/')}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <img src={Harmoneylogo} alt="Harmoney Logo" width="60" height="60" />
+                  </button>
+                </div>
+      
+                <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                  <li>
+                    <button className="nav-link px-4 btn btn-link" style={{ color: '#7f56d9ff', fontSize: '17px' }} onClick={() => navigate('/home')}>Home</button>
+                  </li>
+                  <li>
+                    <button className="nav-link px-4 btn btn-link" style={{ color: '#7f56d9ff', fontSize: '17px' }} onClick={() => navigate('/activegoals')}>Active goals</button>
+                  </li>
+                  <li>
+                    <button className="nav-link px-4 btn btn-link" style={{ color: '#7f56d9ff', fontSize: '17px' }} onClick={() => navigate('/pastgoals')}>Achieved goals</button>
+                  </li>
+                  <li>
+                    <button className="nav-link px-4 btn btn-link" style={{ color: '#7f56d9ff', fontSize: '17px' }} onClick={() => navigate('/dreamframe')}>DreamFrame</button>
+                  </li>
+                </ul>
+                <div className="col-md-3 text-end">
+                  {user?.name ? (
+                    <Dropdown align="end">
+                      <Dropdown.Toggle style={{ background: '#7f56d9ce' }}>
+                        Hi, {user.name}
+                      </Dropdown.Toggle>
+      
+                      <Dropdown.Menu style={{ background: '#7f56d955' }}>
+                        <Dropdown.Item
+                          onClick={() => {
+                            navigate('/add-goal');
+                          }}
+                        >
+                          Add Goal
+                        </Dropdown.Item>
+                        <Dropdown.Divider />
+                        <Dropdown.Item onClick={() => navigate('/dashboard')}>Dashboard</Dropdown.Item>
+                        <Dropdown.Divider />
+                        <Dropdown.Item
+                          onClick={() => {
+                            localStorage.clear();
+                            navigate('/login');
+                          }}
+                        >
+                          Logout
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  ) : (
+                    <button
+                      className="btn me-2"
+                      onClick={() => navigate('/login')}
+                      style={{ background: '#7f56d955' }}
+                    >
+                      Logout
+                    </button>
+                  )}
+                </div>
+              </header>
+      {/* (Navbar code remains unchanged) */}
 
       {/* CHAT CONTENT */}
       <main

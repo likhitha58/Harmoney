@@ -3,6 +3,7 @@ import '../styles/login.css';
 import loginSideImage from '../assets/loginSideImage.png';
 import logo from '../assets/Harmoney.png';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,39 +23,47 @@ const Login = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.message || 'Login failed');
+        toast.error(data.message || 'Login failed', {
+          className: 'custom-toast error',
+        });
         return;
       }
 
-      // Save token in localStorage (or cookies)
-      localStorage.setItem('token', data.token);
-
-      alert('Login successful!');
-      // After successful login
+      // Save token & user data
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-      navigate('/home');
+
+      toast.success('Login successful!', {
+        className: 'custom-toast success',
+      });
+
+      // Redirect after short delay
+      setTimeout(() => navigate('/home'), 1000);
     } catch (err) {
       console.error(err);
-      alert('Something went wrong');
+      toast.error('Something went wrong', {
+        className: 'custom-toast error',
+      });
     }
   };
 
   return (
     <>
       <div className="welcome-header text-center">
-        <img src={logo} alt="Logo Image" />
+        <img src={logo} alt="Logo" />
       </div>
 
       <div className="glass-container d-flex justify-content-center align-items-center">
         <div className="glass-card d-flex shadow-lg">
           <div className="glass-image">
-            <img src={loginSideImage} alt="Side Image" />
+            <img src={loginSideImage} alt="Side" />
           </div>
 
           <div className="glass-form p-4">
             <h3 className="fw-bold mb-2">Login</h3>
-            <p className="text-muted mb-4">Welcome back to Harmoney.. Continue your savings!!</p>
+            <p className="text-muted mb-4">
+              Welcome back to Harmoney.. Continue your savings!!
+            </p>
 
             <form onSubmit={handleSubmit}>
               <input
@@ -77,7 +86,15 @@ const Login = () => {
             </form>
 
             <div className="mt-3 text-center">
-              <small>Forgot password? <span className="link-text" onClick={() => navigate('/ResetPassword')}>Reset Password</span></small>
+              <small>
+                Forgot password?{" "}
+                <span
+                  className="link-text"
+                  onClick={() => navigate('/ResetPassword')}
+                >
+                  Reset Password
+                </span>
+              </small>
             </div>
           </div>
         </div>

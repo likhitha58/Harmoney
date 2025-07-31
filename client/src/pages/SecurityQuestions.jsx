@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../styles/SecurityQuestions.css';
 import loginSideImage from '../assets/loginSideImage.png';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 const SecurityQuestions = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const SecurityQuestions = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      alert('Email not found. Please sign up again.');
+      toast.warning('Email not found. Please sign up again.');
       navigate('/signup');
       return;
     }
@@ -52,14 +53,14 @@ const SecurityQuestions = () => {
 
       const data = await res.json();
       if (res.ok) {
-        alert('Security questions saved successfully!');
+        toast.success('Security questions saved successfully!');
         navigate('/login');
       } else {
-        alert(data.message || 'Failed to save security questions');
+        toast.error(data.message || 'Failed to save security questions');
       }
     } catch (err) {
       console.error(err);
-      alert('Something went wrong');
+      toast.error('Something went wrong');
     }
   };
 

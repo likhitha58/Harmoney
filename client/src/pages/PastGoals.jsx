@@ -4,6 +4,7 @@ import axios from "axios";
 import Footer from "../components/Footer";
 import { Card, Button, Row, Col, Dropdown } from "react-bootstrap";
 import Harmoneylogo from "../assets/logo.png";
+import { toast } from "react-toastify";
 
 const PastGoals = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const PastGoals = () => {
         });
         setGoals(res.data); // Use res.data, not completed
       } catch (err) {
-        console.error("Error fetching achieved goals", err);
+        toast.error("Error fetching achieved goals", err);
       } finally {
         setLoading(false);
       }

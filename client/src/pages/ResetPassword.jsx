@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../styles/SecurityQuestions.css';
 import loginSideImage from '../assets/loginSideImage.png';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const ResetPassword = () => {
     e.preventDefault();
 
     if (!email) {
-      alert('Please enter your email');
+      toast.warning('Please enter your email');
       return;
     }
 
@@ -32,7 +33,7 @@ const ResetPassword = () => {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      alert("Passwords don't match");
+      toast.warning("Passwords don't match");
       return;
     }
 
@@ -49,15 +50,15 @@ const ResetPassword = () => {
 
       const data = await res.json();
       if (res.ok) {
-        alert('Password reset successful');
+        toast.success('Password reset successful');
         navigate('/login');
       } else {
-        alert(data.message || 'Password reset failed');
+        toast.error(data.message || 'Password reset failed');
         setStep(1); // Go back to step 1 if incorrect
       }
     } catch (err) {
       console.error(err);
-      alert('Something went wrong');
+      toast.error('Something went wrong');
     }
   };
 

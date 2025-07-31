@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import Footer from "../components/Footer";
 import Harmoneylogo from '../assets/logo.png';
-// import '../styles/HomePage.css';
 
 const HomePage = () => {
   const navigate = useNavigate();

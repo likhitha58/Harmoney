@@ -4,6 +4,7 @@ import { Dropdown } from "react-bootstrap";
 import axios from "axios";
 import Footer from "../components/Footer";
 import Harmoneylogo from "../assets/logo.png";
+import { toast } from "react-toastify";
 import "../styles/activeGoals.css";
 
 const ActiveGoals = () => {
@@ -32,7 +33,7 @@ const ActiveGoals = () => {
 
         setGoals(res.data);
       } catch (err) {
-        console.error("Error fetching active goals", err);
+        toast.error("Error fetching active goals", err);
         if (err.response?.status === 401) {
           // Token invalid or expired
           localStorage.clear();
@@ -63,7 +64,7 @@ const ActiveGoals = () => {
           <li>
             <button
               className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
               onClick={() => navigate("/home")}
             >
               Home
@@ -72,7 +73,7 @@ const ActiveGoals = () => {
           <li>
             <button
               className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
               onClick={() => navigate("/activegoals")}
             >
               Active goals
@@ -81,7 +82,7 @@ const ActiveGoals = () => {
           <li>
             <button
               className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
               onClick={() => navigate("/pastgoals")}
             >
               Achieved goals
@@ -90,7 +91,7 @@ const ActiveGoals = () => {
           <li>
             <button
               className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
               onClick={() => navigate("/budgetbuddy")}
             >
               Chat
@@ -99,7 +100,7 @@ const ActiveGoals = () => {
           <li>
             <button
               className="nav-link px-4 btn btn-link"
-              style={{ color: "#7f56d9ff", fontSize: "17px" }}
+              style={{ color: "#7f56d9ff", fontSize: "16px" }}
               onClick={() => navigate("/dreamframe")}
             >
               Dream Frame
