@@ -43,7 +43,12 @@ export const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
 
     res.status(200).json({ message: "Login successful", token, user: { name: user.name, email: user.email } });
   } catch (err) {
@@ -70,5 +75,5 @@ export const verifySecurityAnswers = async (req, res) => {
   user.password = await bcrypt.hash(newPassword, 10);
   await user.save();
 
-  res.status(200).json({ message: "Password reset successful" });
+  res.status(200).json({ message: "Password reset successful" });
 };
