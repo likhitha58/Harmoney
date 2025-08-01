@@ -1,6 +1,6 @@
-# Harmoney – Your Financial Goals, Simplified
+# Harmoney – Simplifying Your Financial Goals
 
-**Harmoney** is a beautifully designed web application that empowers individuals to plan, visualize, and achieve their financial dreams. With a modern interface, AI-powered tools, and inspirational content, Harmoney transforms the way you manage money and goals.
+**Harmoney** is a modern web application designed to help individuals plan, visualize, and achieve their financial goals. With an intuitive interface, AI-powered tools, and motivational features, Harmoney redefines how you approach personal finance and goal management.
 
 ---
 
@@ -13,7 +13,7 @@
 - **AI Savings Plan** – Generate a customized monthly savings plan using Gemini AI.
 - **Responsive Design** – Sleek experience across all devices.
 - **Motivational Quotes** – Gentle nudges to keep you inspired.
-
+- **Email Notifications** - Get email notifications upon adding, updating and completing your goal.
 ---
 
 ## AI Integrations
@@ -65,8 +65,21 @@ BudgetBuddy is an AI chatbot that helps you:
 
 ## Tech Stack
 
-- **Frontend:** React, Bootstrap
+- **Frontend:** React, Bootstrap, Canva (images)
 - **Backend:** Node.js, Express.js, MongoDB
+- **Authentication:** Jason Web Token
+- **AI Integration:**  
+  - Stability AI (DreamFrame)  
+  - Gemini AI (BudgetBuddy & Savings Plan Generator)
+- **Version Control:** Git + GitHub
+
+---
+
+## Getting Started
+
+- **Clone Repo** git clone https://github.com/your-username/Harmoney.git
+- **Backend:** Node.js, Express.js, MongoDB
+- **Authentication:** Jason Web Token
 - **AI Integration:**  
   - Stability AI (DreamFrame)  
   - Gemini AI (BudgetBuddy & Savings Plan Generator)
