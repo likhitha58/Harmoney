@@ -77,15 +77,9 @@ BudgetBuddy is an AI chatbot that helps you:
 
 ## Getting Started
 
-- **Clone Repo** git clone https://github.com/your-username/Harmoney.git <br><br> cd Harmoney <br><br> cd server <br> npm install <br><br> cd client <br> npm install <br><br>
-- **Configure Environment variables** MONGO_URI=your_mongodb_connection_string <br> JWT_SECRET=your_jwt_secret <br> STABILITY_API_KEY=your_stability_ai_key <br> GEMINI_API_KEY=your_google_generative_ai_key <br> EMAIL_USER=your_email_address <br> EMAIL_PASS=your_email_password_or_app_specific_password <br><br>
-- **Run Dev servers** cd server <br> npm run dev <br><br> cd client <br> npm run dev <br><br> By default:
-
-Backend runs on http://localhost:5000
-
-Frontend runs on http://localhost:5173 (or 3000 depending on setup)
-
-
+- **Clone Repo** <br>git clone https://github.com/your-username/Harmoney.git <br><br> cd Harmoney <br><br> cd server <br> npm install <br><br> cd client <br> npm install <br><br>
+- **Configure Environment variables** <br> MONGO_URI=your_mongodb_connection_string <br> JWT_SECRET=your_jwt_secret <br> STABILITY_API_KEY=your_stability_ai_key <br> GEMINI_API_KEY=your_google_generative_ai_key <br> EMAIL_USER=your_email_address <br> EMAIL_PASS=your_email_password_or_app_specific_password <br><br>
+- **Run Dev servers** <br>cd server <br> npm run dev <br><br> cd client <br> npm run dev <br><br> By default: Backend runs on http://localhost:5000 <br> Frontend runs on http://localhost:5173 (or 3000 depending on setup)
 ---
 
 ## License
