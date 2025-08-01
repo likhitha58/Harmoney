@@ -116,7 +116,6 @@ const AddGoal = () => {
               <Dropdown.Menu style={{ background: '#7f56d955' }}>
                 <Dropdown.Item
                   onClick={() => {
-                    localStorage.clear();
                     navigate('/budgetbuddy');
                   }}
                 >
@@ -125,7 +124,6 @@ const AddGoal = () => {
                 <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={() => {
-                    localStorage.clear();
                     navigate('/dreamframe');
                   }}
                 >

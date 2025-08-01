@@ -106,7 +106,6 @@ const PastGoals = () => {
                 <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={() => {
-                    localStorage.clear();
                     navigate('/budgetbuddy');
                   }}
                 >
@@ -115,7 +114,6 @@ const PastGoals = () => {
                 <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={() => {
-                    localStorage.clear();
                     navigate('/dreamframe');
                   }}
                 >
