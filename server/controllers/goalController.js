@@ -178,3 +178,48 @@ export const deleteGoal = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+//goal completion points
+export const completeGoal = async (req, res) => {
+  try {
+    // Find goal only if it belongs to the logged-in user
+    const goal = await Goal.findOne({ _id: req.params.id, userId: req.user.id });
+    if (!goal) {
+      return res.status(404).json({ message: "Goal not found" });
+    }
+
+    // Mark goal as completed
+    goal.status = "completed";
+    goal.completed = true;
+    await goal.save();
+
+    // Award points and assign badges
+    const user = await User.findById(req.user.id);
+    user.points += 50;
+
+    if (user.points >= 100 && !user.badges.includes("Beginner")) {
+      user.badges.push("Beginner");
+    }
+    if (user.points >= 500 && !user.badges.includes("Pro Saver")) {
+      user.badges.push("Pro Saver");
+    }
+    if (user.points >= 1000 && !user.badges.includes("Financial Guru")) {
+      user.badges.push("Financial Guru");
+    }
+
+    await user.save();
+
+    // Optionally send a completion email (consistency)
+    await sendEmail(
+      user.email,
+      "Congratulations! Goal Achieved 🎉",
+      goalCompletedTemplate(goal, user.name || "User")
+    );
+    console.log("Complete goal called for ID:", req.params.id, "User:", req.user.id);
+    console.log("Updated user points:", user.points, "Badges:", user.badges);
+    res.json({ message: "Goal completed and points awarded!", user });
+  } catch (error) {
+    console.error("Error completing goal:", error);
+    res.status(500).json({ message: error.message });
+  }
+};

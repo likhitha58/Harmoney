@@ -10,8 +10,11 @@ const userSchema = new mongoose.Schema({
       question: String,
       answer: String
     }
-  ]
+  ],
+  points: { type: Number, default: 0 },
+  badges: [String],
+
 });
 
 const User = mongoose.model('User', userSchema);
-export default User;
+export default User;

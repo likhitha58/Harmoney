@@ -129,6 +129,30 @@ const Dashboard = () => {
     navigate("/login");
   };
 
+  const completeGoal = async (goalId) => {
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
+
+    try {
+      const res = await axios.put(`/api/goals/${goalId}/complete`, {}, { headers });
+      toast.success("Goal marked as completed! Points awarded.");
+
+      // Update user points in state
+      if (res.data.user) {
+        setUser(res.data.user);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+      }
+
+      // Reload goals without a full page reload
+      fetchGoals(); // move fetchGoals outside useEffect for reusability
+    } catch (err) {
+      console.error("Failed to complete goal:", err);
+      toast.error("Could not complete goal. Please try again.");
+    }
+  };
+
+
+
   return (
     <div className="container" style={{ position: "relative" }}>
       {/* NAVBAR */}
@@ -261,6 +285,7 @@ const Dashboard = () => {
                 value: `₹${totalSaved.toLocaleString()}`,
                 sub: `of ₹${totalTarget.toLocaleString()}`,
               },
+              { title: "Your Points", value: user?.points || 0 }
             ].map((card, index) => (
               <Col md={3} key={index} className="mb-3">
                 <Card
@@ -301,6 +326,21 @@ const Dashboard = () => {
             >
               {savingsPercent.toFixed(0)}%
             </div>
+            <h4 style={{ color: "#7F56D9", marginTop: "40px" }}>
+              Points Earned From Completed Goals
+            </h4>
+            {completedGoals.length === 0 ? (
+              <p>No points earned yet.</p>
+            ) : (
+              <ul>
+                {completedGoals.map((goal) => (
+                  <li key={goal._id}>
+                    {goal.title} – 50 points
+                  </li>
+                ))}
+              </ul>
+            )}
+
           </div>
 
           {/* Active Goals Progress */}
@@ -362,6 +402,19 @@ const Dashboard = () => {
                       ₹{saved.toLocaleString()} / ₹
                       {goal.targetAmount.toLocaleString()}
                     </div>
+
+                    <Button
+                      variant="success"
+                      style={{
+                        backgroundColor: "#7F56D9",
+                        border: "none",
+                        marginTop: "10px"
+                      }}
+                      onClick={() => completeGoal(goal._id)}
+                    >
+                      Complete Goal
+                    </Button>
+
                   </Card.Body>
                 </Card>
               );
