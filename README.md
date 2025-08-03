@@ -14,6 +14,7 @@
 - **Responsive Design** – Sleek experience across all devices.
 - **Motivational Quotes** – Gentle nudges to keep you inspired.
 - **Email Notifications** - Get email notifications upon adding, updating and completing your goal.
+- **Reward Points** - Reward points are awarded for completing a goal or maintaining a streak.
 ---
 
 ## AI Integrations
