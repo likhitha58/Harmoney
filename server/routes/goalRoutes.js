@@ -4,8 +4,7 @@ import {
   getGoals,
   getAchievedGoals,
   updateGoal,
-  deleteGoal,
-  completeGoal
+  deleteGoal
 } from "../controllers/goalController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -24,7 +23,4 @@ router.put("/goals/:id", protect, updateGoal);
 
 //delete goal by id
 router.delete("/goals/:id", protect, deleteGoal);
-
-router.put("/goals/:id/complete", protect, completeGoal);
-
 export default router;

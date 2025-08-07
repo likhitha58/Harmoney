@@ -19,96 +19,73 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const Dashboard = () => {
   const navigate = useNavigate();
 
-  // User info for dropdown
   const [user, setUser] = useState(null);
-
-  // Goals state
   const [activeGoals, setActiveGoals] = useState([]);
   const [completedGoals, setCompletedGoals] = useState([]);
   const [allGoals, setAllGoals] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Totals
-  const totalSaved = allGoals.reduce(
-    (acc, g) => acc + (g.currentSavings || 0),
-    0
-  );
-  const totalTarget = allGoals.reduce(
-    (acc, g) => acc + (g.targetAmount || 0),
-    0
-  );
-  const savingsPercent =
-    totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
+  const totalSaved = allGoals.reduce((acc, g) => acc + (g.currentSavings || 0), 0);
+  const totalTarget = allGoals.reduce((acc, g) => acc + (g.targetAmount || 0), 0);
+  const savingsPercent = totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
 
   const getSaved = (goal) => goal.currentSavings || 0;
 
-  const data = useMemo(
-    () => ({
-      labels: ["Saved", "Remaining"],
-      datasets: [
-        {
-          data: [totalSaved, Math.max(totalTarget - totalSaved, 0)],
-          backgroundColor: ["#7F56D9", "#E0E0E0"],
-          hoverOffset: 6,
-          borderWidth: 0,
-        },
-      ],
-    }),
-    [totalSaved, totalTarget]
-  );
-
-  const options = useMemo(
-    () => ({
-      cutout: "75%",
-      plugins: {
-        legend: { display: false },
-        tooltip: { enabled: true },
+  const data = useMemo(() => ({
+    labels: ["Saved", "Remaining"],
+    datasets: [
+      {
+        data: [totalSaved, Math.max(totalTarget - totalSaved, 0)],
+        backgroundColor: ["#7F56D9", "#E0E0E0"],
+        hoverOffset: 6,
+        borderWidth: 0,
       },
-      animation: {
-        animateRotate: true,
-        animateScale: true,
-        duration: 1500,
-        easing: "easeOutCubic",
-      },
-    }),
-    []
-  );
+    ],
+  }), [totalSaved, totalTarget]);
 
-  // Fetch goals
-  useEffect(() => {
-    const fetchGoals = async () => {
-      const token = localStorage.getItem("token");
-      const headers = { Authorization: `Bearer ${token}` };
+  const options = useMemo(() => ({
+    cutout: "75%",
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: true },
+    },
+    animation: {
+      animateRotate: true,
+      animateScale: true,
+      duration: 1500,
+      easing: "easeOutCubic",
+    },
+  }), []);
 
-      try {
-        const activeRes = await axios.get("/api/goals", { headers });
-        const completedRes = await axios.get("/api/goals/achieved", { headers });
+  const fetchGoals = async () => {
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
 
-        setActiveGoals(activeRes.data);
-        setCompletedGoals(completedRes.data);
-        setAllGoals([...activeRes.data, ...completedRes.data]);
+    try {
+      const activeRes = await axios.get("/api/goals", { headers });
+      const completedRes = await axios.get("/api/goals/achieved", { headers });
 
-        console.log("Goals updated successfully!", "success");
-      } catch (err) {
-        console.error("Failed to fetch goals:", err);
-        console.log("Failed to fetch goals", "error");
-      } finally {
-        setLoading(false);
-      }
-    };
+      setActiveGoals(activeRes.data);
+      setCompletedGoals(completedRes.data);
+      setAllGoals([...activeRes.data, ...completedRes.data]);
 
-    // Fetch user from localStorage
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
+      console.log("Goals updated successfully!", "success");
+    } catch (err) {
+      console.error("Failed to fetch goals:", err);
+      console.log("Failed to fetch goals", "error");
+    } finally {
+      setLoading(false);
     }
+  };
 
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) setUser(JSON.parse(userData));
     fetchGoals();
   }, []);
 
   if (loading) return <p className="text-center">Loading...</p>;
 
-  // Card style
   const cardBaseStyle = {
     boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
     border: "none",
@@ -124,27 +101,14 @@ const Dashboard = () => {
       : "0 2px 5px rgba(0,0,0,0.1)";
   };
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/login");
-  };
-
   const completeGoal = async (goalId) => {
     const token = localStorage.getItem("token");
     const headers = { Authorization: `Bearer ${token}` };
 
     try {
-      const res = await axios.put(`/api/goals/${goalId}/complete`, {}, { headers });
-      toast.success("Goal marked as completed! Points awarded.");
-
-      // Update user points in state
-      if (res.data.user) {
-        setUser(res.data.user);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-      }
-
-      // Reload goals without a full page reload
-      fetchGoals(); // move fetchGoals outside useEffect for reusability
+      await axios.put(`/api/goals/${goalId}/complete`, {}, { headers });
+      toast.success("Goal marked as completed!");
+      fetchGoals(); // refresh goals
     } catch (err) {
       console.error("Failed to complete goal:", err);
       toast.error("Could not complete goal. Please try again.");
@@ -285,7 +249,7 @@ const Dashboard = () => {
                 value: `₹${totalSaved.toLocaleString()}`,
                 sub: `of ₹${totalTarget.toLocaleString()}`,
               },
-              { title: "Your Points", value: user?.points || 0 }
+              
             ].map((card, index) => (
               <Col md={3} key={index} className="mb-3">
                 <Card
@@ -326,21 +290,6 @@ const Dashboard = () => {
             >
               {savingsPercent.toFixed(0)}%
             </div>
-            <h4 style={{ color: "#7F56D9", marginTop: "40px" }}>
-              Points Earned From Completed Goals
-            </h4>
-            {completedGoals.length === 0 ? (
-              <p>No points earned yet.</p>
-            ) : (
-              <ul>
-                {completedGoals.map((goal) => (
-                  <li key={goal._id}>
-                    {goal.title} – 50 points
-                  </li>
-                ))}
-              </ul>
-            )}
-
           </div>
 
           {/* Active Goals Progress */}
@@ -402,19 +351,6 @@ const Dashboard = () => {
                       ₹{saved.toLocaleString()} / ₹
                       {goal.targetAmount.toLocaleString()}
                     </div>
-
-                    <Button
-                      variant="success"
-                      style={{
-                        backgroundColor: "#7F56D9",
-                        border: "none",
-                        marginTop: "10px"
-                      }}
-                      onClick={() => completeGoal(goal._id)}
-                    >
-                      Complete Goal
-                    </Button>
-
                   </Card.Body>
                 </Card>
               );
